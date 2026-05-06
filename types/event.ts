@@ -6,6 +6,7 @@ export interface Event {
   location: string
   description: string
   content: string
+  category?: string
   rsvpLink?: string
   coverImage?: string
   isPast: boolean

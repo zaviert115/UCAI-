@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
-import PageContainer from '@/components/layout/PageContainer'
-import TutorialCard from '@/components/sections/TutorialCard'
-import { getTutorialsByCategory } from '@/lib/tutorials'
+import TutorialsSection from '@/components/sections/TutorialsSection'
+import { getAllTutorials } from '@/lib/tutorials'
 
 export const metadata: Metadata = {
   title: 'Tutorials',
@@ -10,37 +9,32 @@ export const metadata: Metadata = {
 }
 
 export default async function TutorialsPage() {
-  const byCategory = await getTutorialsByCategory()
-  const categories = Object.keys(byCategory).sort()
+  const tutorials = await getAllTutorials()
 
   return (
     <>
-      <section className="bg-navy-800 text-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Tutorials</h1>
-          <p className="text-white/70 text-lg max-w-xl">
-            Practical guides you can work through at your own pace — no prior experience required.
+      <section className="hero hero-c" style={{ minHeight: 'auto' }}>
+        <div className="hero-c-noise" />
+        <div className="hero-c-canvas" style={{ opacity: 0.5 }} aria-hidden="true">
+          <div className="glow-blob b1" style={{ animationDuration: '30s' }} />
+          <div className="glow-blob b2" style={{ animationDuration: '40s' }} />
+        </div>
+        <div
+          className="wrap hero-content"
+          style={{ paddingTop: 80, paddingBottom: 80, position: 'relative', zIndex: 2 }}
+        >
+          <span className="hero-eyebrow" style={{ color: 'var(--cyan)', justifyContent: 'center' }}>
+            <span className="dot" />
+            UC AI Society
+          </span>
+          <h1 style={{ fontSize: 'clamp(40px,6vw,72px)', marginBottom: 16 }}>Tutorials</h1>
+          <p className="hero-lede" style={{ margin: '0 auto', textAlign: 'center' }}>
+            Practical guides written by members — work through them at your own pace.
           </p>
         </div>
       </section>
 
-      <PageContainer>
-        {categories.length === 0 && (
-          <p className="text-muted-foreground">No tutorials yet — check back soon.</p>
-        )}
-        <div className="space-y-14">
-          {categories.map((category) => (
-            <section key={category}>
-              <h2 className="text-xl font-bold text-navy-800 mb-6">{category}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {byCategory[category].map((tutorial) => (
-                  <TutorialCard key={tutorial.slug} tutorial={tutorial} />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </PageContainer>
+      <TutorialsSection tutorials={tutorials} />
     </>
   )
 }

@@ -38,10 +38,10 @@ export default function ContactPage() {
             <div>
               <h2 className="font-semibold text-navy-800 mb-3">Email</h2>
               <a
-                href="mailto:committee@ucaisoc.nz"
+                href="mailto:ucaisoc@outlook.com"
                 className="text-muted-foreground hover:text-navy-800 transition-colors text-sm"
               >
-                committee@ucaisoc.nz
+                ucaisoc@outlook.com
               </a>
             </div>
 
