@@ -1,0 +1,106 @@
+---
+title: "Prompt Engineering 101"
+category: "Prompt Engineering"
+author: "UC AI Society"
+date: "2026-05-01"
+readTime: 8
+description: "Learn the core techniques for writing effective prompts — from zero-shot to chain-of-thought — with practical examples you can use right now."
+---
+
+## What is prompt engineering?
+
+A **prompt** is the instruction you give an AI model. Prompt engineering is the practice of crafting those instructions to get better, more reliable outputs.
+
+The good news: most effective techniques are simple once you know them.
+
+---
+
+## 1. Be specific and explicit
+
+Vague prompts produce vague output.
+
+**Bad:** `Write about climate change.`
+
+**Better:** `Write a 200-word plain-English explainer on how CO₂ causes the greenhouse effect, aimed at a secondary school student with no science background.`
+
+The better version specifies: format (200 words), audience (secondary school student), topic (CO₂ and the greenhouse effect), and tone (plain English).
+
+---
+
+## 2. Give the model a role
+
+Assigning a role primes the model's "perspective".
+
+```
+You are an expert Python developer reviewing a junior developer's code.
+Review the following function and explain any issues to the junior developer
+in encouraging, constructive language.
+```
+
+---
+
+## 3. Few-shot examples
+
+Show the model what good output looks like with 2–3 examples before your actual request.
+
+```
+Convert these product descriptions to bullet points:
+
+Input: "A sturdy, waterproof backpack with 30L capacity and laptop sleeve."
+Output:
+- Waterproof construction
+- 30L capacity
+- Dedicated laptop sleeve
+
+Input: "Noise-cancelling headphones with 40-hour battery and USB-C charging."
+Output:
+- Active noise cancellation
+- 40-hour battery life
+- USB-C charging
+
+Input: "Ergonomic office chair with lumbar support and adjustable armrests."
+Output:
+```
+
+---
+
+## 4. Chain-of-thought (CoT)
+
+For reasoning tasks, ask the model to think step by step before giving a final answer.
+
+```
+A store sells apples for $0.50 each and bags of 6 for $2.50.
+I want to buy 15 apples. What's the cheapest way?
+Think through this step by step before giving your final answer.
+```
+
+This dramatically improves accuracy on maths, logic, and multi-step problems.
+
+---
+
+## 5. Specify the output format
+
+Tell the model exactly how you want the response structured.
+
+```
+List three pros and three cons of remote work.
+Format your response as:
+
+Pros:
+1. ...
+2. ...
+3. ...
+
+Cons:
+1. ...
+2. ...
+3. ...
+```
+
+---
+
+## What to try next
+
+- Experiment with different temperatures (if the API lets you) — lower = more predictable, higher = more creative
+- Try [system prompts vs user prompts](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/system-prompts) in the Anthropic docs
+- Read our follow-up: **Advanced Prompt Patterns** (coming soon)

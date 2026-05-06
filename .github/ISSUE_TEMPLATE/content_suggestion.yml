@@ -1,0 +1,36 @@
+name: Content suggestion
+description: Suggest an event idea, tutorial topic, or other content
+labels: ["content"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Content type
+      options:
+        - Event idea
+        - Tutorial topic
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: title
+    attributes:
+      label: Title / topic
+      placeholder: "Tutorial: Getting started with the OpenAI API"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      placeholder: What would this event/tutorial cover? Who is the target audience?
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      placeholder: Happy to help write the tutorial content, know a speaker who could present, etc.
