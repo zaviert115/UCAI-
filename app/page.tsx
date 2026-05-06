@@ -3,7 +3,6 @@ import Hero from '@/components/sections/Hero'
 import StatsSection from '@/components/sections/StatsSection'
 import PillarsSection from '@/components/sections/PillarsSection'
 import EventsSection from '@/components/sections/EventsSection'
-import MiniTerminal from '@/components/sections/MiniTerminal'
 import ProjectsSection from '@/components/sections/ProjectsSection'
 import TutorialsSection from '@/components/sections/TutorialsSection'
 import TeamSection from '@/components/sections/TeamSection'
@@ -28,7 +27,6 @@ export default async function HomePage() {
       <StatsSection />
       <PillarsSection />
       <EventsSection events={allEvents} teaser />
-      <MiniTerminal />
       <ProjectsSection />
       <TutorialsSection tutorials={allTutorials} teaser />
       <TeamSection />

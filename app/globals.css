@@ -661,13 +661,13 @@
   font-weight: 500;
   transition: color 0.15s;
 }
-.nav-links a:hover,
-.nav-links a.active {
+.nav-links a:not(.nav-cta):hover,
+.nav-links a:not(.nav-cta).active {
   color: var(--navy-900);
 }
 .nav-cta {
   background: var(--navy-800);
-  color: white;
+  color: white !important;
   padding: 9px 16px;
   border-radius: 8px;
   font-size: 13px;
@@ -678,6 +678,7 @@
 }
 .nav-cta:hover {
   background: var(--navy-900);
+  color: white !important;
 }
 @media (max-width: 800px) {
   .nav-links a:not(.nav-cta) {
