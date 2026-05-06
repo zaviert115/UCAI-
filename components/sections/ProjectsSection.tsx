@@ -54,7 +54,11 @@ export default function ProjectsSection() {
               it on Discord.
             </p>
           </div>
-          <a href="#" className="btn btn-ghost" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
+          <a
+            href="/projects"
+            className="btn btn-ghost"
+            style={{ borderColor: 'rgba(255,255,255,0.2)' }}
+          >
             All projects →
           </a>
         </div>
