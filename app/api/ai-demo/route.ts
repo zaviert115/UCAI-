@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Anthropic from '@anthropic-ai/sdk'
+import OpenAI from 'openai'
+
+// build.nvidia.com — free, OpenAI-compatible, rate-limited hosted open models.
+const NVIDIA_BASE_URL = 'https://integrate.api.nvidia.com/v1'
+const MODEL = process.env.NVIDIA_MODEL ?? 'meta/llama-3.3-70b-instruct'
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.ANTHROPIC_API_KEY
+  const apiKey = process.env.NVIDIA_API_KEY
   if (!apiKey) {
     return NextResponse.json(
-      { answer: 'AI demo is not configured yet. Add ANTHROPIC_API_KEY to your environment.' },
+      { answer: 'AI demo is not configured yet. Add NVIDIA_API_KEY to your environment.' },
       { status: 200 }
     )
   }
@@ -16,21 +20,22 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const client = new Anthropic({ apiKey })
-    const message = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
+    const client = new OpenAI({ baseURL: NVIDIA_BASE_URL, apiKey })
+    const completion = await client.chat.completions.create({
+      model: MODEL,
       max_tokens: 200,
+      temperature: 0.5,
       messages: [
         {
-          role: 'user',
-          content: `You are a friendly UC AI Society assistant. Answer in 1-2 short sentences, max 50 words. Be helpful and enthusiastic. Question: ${prompt}`,
+          role: 'system',
+          content:
+            'You are a friendly UC AI Society assistant. Answer in 1-2 short sentences, max 50 words. Be helpful and enthusiastic.',
         },
+        { role: 'user', content: prompt },
       ],
     })
     const answer =
-      message.content[0].type === 'text'
-        ? message.content[0].text
-        : 'Sorry, I could not generate a response.'
+      completion.choices[0]?.message?.content?.trim() || 'Sorry, I could not generate a response.'
     return NextResponse.json({ answer })
   } catch {
     return NextResponse.json(
