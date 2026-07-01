@@ -1,9 +1,14 @@
 import Image from 'next/image'
+import PaperSection from '@/components/layout/PaperSection'
+import SectionHeader from '@/components/layout/SectionHeader'
+import Reveal from '@/components/chrome/Reveal'
 
 interface Sponsor {
   name: string
-  logo?: string // path relative to /public, e.g. '/sponsors/uc-logo.png'
+  logo?: string // path relative to /public
   url?: string
+  w: number // intrinsic width  (for aspect ratio)
+  h: number // intrinsic height
 }
 
 const sponsors: {
@@ -17,62 +22,73 @@ const sponsors: {
       name: 'University of Canterbury',
       logo: '/sponsors/uc.jpg',
       url: 'https://www.canterbury.ac.nz',
+      w: 944,
+      h: 629,
     },
     {
       name: 'UC Engineering Pūhanga',
       logo: '/sponsors/uc-engineering.png',
       url: 'https://www.canterbury.ac.nz/engineering',
+      w: 1890,
+      h: 591,
     },
   ],
   gold: [],
   community: [],
   poweredBy: [
-    { name: 'Claude', logo: '/sponsors/claude.png', url: 'https://claude.ai' },
-    { name: 'OpenAI', logo: '/sponsors/openai.png', url: 'https://openai.com' },
-    { name: 'Gemini', logo: '/sponsors/gemini.png', url: 'https://gemini.google.com' },
+    { name: 'Claude', logo: '/sponsors/claude.png', url: 'https://claude.ai', w: 3840, h: 825 },
+    { name: 'OpenAI', logo: '/sponsors/openai.png', url: 'https://openai.com', w: 1280, h: 348 },
+    {
+      name: 'Gemini',
+      logo: '/sponsors/gemini.png',
+      url: 'https://gemini.google.com',
+      w: 1080,
+      h: 1080,
+    },
   ],
 }
 
-function SponsorTile({
-  sponsor,
-  large = false,
-  keepColor = false,
-}: {
-  sponsor: Sponsor
-  large?: boolean
-  keepColor?: boolean
-}) {
+function SponsorLogo({ sponsor, maxH }: { sponsor: Sponsor; maxH: number }) {
   const inner = sponsor.logo ? (
     <Image
       src={sponsor.logo}
       alt={sponsor.name}
-      width={large ? 180 : 140}
-      height={large ? 60 : 48}
+      width={sponsor.w}
+      height={sponsor.h}
+      // multiply dissolves the white/opaque logo backgrounds into the cream
       style={{
+        width: 'auto',
+        height: 'auto',
+        maxHeight: maxH,
+        maxWidth: '100%',
         objectFit: 'contain',
-        filter: keepColor ? 'none' : 'grayscale(1)',
-        transition: 'filter 0.2s',
+        mixBlendMode: 'multiply',
       }}
-      className={keepColor ? undefined : 'sponsor-logo-img'}
     />
   ) : (
-    <span>{sponsor.name}</span>
+    <span className="mono" style={{ fontSize: 13, color: 'rgba(11,11,15,0.7)' }}>
+      {sponsor.name}
+    </span>
   )
 
   return (
-    <div className="sponsor" style={{ minHeight: large ? 110 : 90, fontSize: large ? 17 : 15 }}>
+    <div
+      className="sponsor-logo"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: maxH + 28,
+        padding: '8px 20px',
+      }}
+    >
       {sponsor.url ? (
         <a
           href={sponsor.url}
           target="_blank"
           rel="noopener noreferrer"
-          style={{
-            textDecoration: 'none',
-            color: 'inherit',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          aria-label={sponsor.name}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}
         >
           {inner}
         </a>
@@ -83,59 +99,63 @@ function SponsorTile({
   )
 }
 
+function TierLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="eyebrow" style={{ color: '#2B53FF', margin: '52px 0 10px' }}>
+      {children}
+    </div>
+  )
+}
+
+function LogoRow({ items, maxH }: { items: Sponsor[]; maxH: number }) {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(auto-fit, minmax(${maxH > 50 ? 240 : 180}px, 1fr))`,
+        gap: 12,
+        alignItems: 'center',
+        borderTop: '1px solid rgba(11,11,15,0.1)',
+      }}
+    >
+      {items.map((s, i) => (
+        <Reveal key={s.name} variant="fade" delay={i * 0.08}>
+          <SponsorLogo sponsor={s} maxH={maxH} />
+        </Reveal>
+      ))}
+    </div>
+  )
+}
+
 export default function SponsorsSection() {
   return (
-    <section className="sponsors-section" id="sponsors">
+    <PaperSection id="sponsors" dataShape="nz">
       <style>{`
-        .sponsor-logo-img { transition: filter 0.2s; }
-        .sponsor:hover .sponsor-logo-img { filter: grayscale(0) !important; }
+        .sponsor-logo img { opacity: .82; transition: opacity .2s ease, transform .2s ease; }
+        .sponsor-logo a:hover img { opacity: 1; transform: scale(1.03); }
       `}</style>
-      <div className="wrap">
-        <div className="sponsors-head">
-          <span className="section-eyebrow" style={{ display: 'block' }}>
-            Supported by
-          </span>
-          <h2>The partners that make this free.</h2>
-        </div>
 
-        <div className="sponsor-tier">— Platinum —</div>
-        <div className="sponsor-grid" style={{ gridTemplateColumns: 'repeat(2,1fr)' }}>
-          {sponsors.platinum.map((s) => (
-            <SponsorTile key={s.name} sponsor={s} large />
-          ))}
-        </div>
+      <SectionHeader index="07" eyebrow="Backed by" title="Our supporters." tone="paper" />
 
-        {sponsors.gold.length > 0 && (
-          <>
-            <div className="sponsor-tier">— Gold —</div>
-            <div className="sponsor-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
-              {sponsors.gold.map((s) => (
-                <SponsorTile key={s.name} sponsor={s} />
-              ))}
-            </div>
-          </>
-        )}
+      <TierLabel>Principal partners</TierLabel>
+      <LogoRow items={sponsors.platinum} maxH={64} />
 
-        {sponsors.community.length > 0 && (
-          <>
-            <div className="sponsor-tier">— Community —</div>
-            <div className="sponsor-grid" style={{ gridTemplateColumns: 'repeat(5,1fr)' }}>
-              {sponsors.community.map((s) => (
-                <SponsorTile key={s.name} sponsor={s} />
-              ))}
-            </div>
-          </>
-        )}
+      {sponsors.gold.length > 0 && (
+        <>
+          <TierLabel>Gold</TierLabel>
+          <LogoRow items={sponsors.gold} maxH={48} />
+        </>
+      )}
 
-        <div className="sponsor-tier" style={{ marginTop: 48 }}>
-          — With support from —
-        </div>
-        <div className="sponsor-grid" style={{ gridTemplateColumns: 'repeat(3,1fr)' }}>
-          {sponsors.poweredBy.map((s) => (
-            <SponsorTile key={s.name} sponsor={s} keepColor />
-          ))}
-        </div>
-      </div>
-    </section>
+      {sponsors.community.length > 0 && (
+        <>
+          <TierLabel>Community</TierLabel>
+          <LogoRow items={sponsors.community} maxH={44} />
+        </>
+      )}
+
+      <TierLabel>With support from</TierLabel>
+      <LogoRow items={sponsors.poweredBy} maxH={40} />
+    </PaperSection>
   )
 }

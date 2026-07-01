@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import PageContainer from '@/components/layout/PageContainer'
 import ContactForm from '@/components/sections/ContactForm'
+import Reveal from '@/components/chrome/Reveal'
+import GradientText from '@/components/ui/GradientText'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -16,12 +18,40 @@ const socials = [
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-navy-800 text-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact us</h1>
-          <p className="text-white/70 text-lg max-w-xl">
-            Got a question, idea, or just want to say hi? We&apos;d love to hear from you.
-          </p>
+      <section className="dark-sec" style={{ paddingBlock: 'clamp(110px,16vh,190px)' }}>
+        <div className="wrap">
+          <Reveal>
+            <span className="mono eyebrow" style={{ color: '#00E0CC' }}>
+              CONTACT · UC·AI
+            </span>
+          </Reveal>
+          <Reveal variant="big" delay={0.05}>
+            <h1
+              style={{
+                fontWeight: 700,
+                fontSize: 'clamp(48px,9vw,128px)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.03em',
+                color: '#F2EFE6',
+                margin: '20px 0 0',
+              }}
+            >
+              Let&apos;s <GradientText sheen>talk.</GradientText>
+            </h1>
+          </Reveal>
+          <Reveal variant="fade" delay={0.12}>
+            <p
+              style={{
+                marginTop: 26,
+                maxWidth: 620,
+                fontSize: 'clamp(16px,1.9vw,20px)',
+                lineHeight: 1.6,
+                color: 'rgba(242,239,230,0.72)',
+              }}
+            >
+              Got a question, idea, or just want to say hi? We&apos;d love to hear from you.
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -30,7 +60,9 @@ export default function ContactPage() {
           {/* Form */}
           <div className="flex-1 min-w-0">
             <h2 className="text-2xl font-bold text-navy-800 mb-6">Send us a message</h2>
-            <ContactForm />
+            <div className="card-paper" style={{ padding: 'clamp(20px,4vw,40px)' }}>
+              <ContactForm />
+            </div>
           </div>
 
           {/* Info */}

@@ -24,13 +24,13 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <StatsSection />
       <PillarsSection />
       <EventsSection events={allEvents} teaser />
       <ProjectsSection />
       <TutorialsSection tutorials={allTutorials} teaser />
       <TeamSection />
       <AIDemo />
+      <StatsSection />
       <SponsorsSection />
       <JoinSection />
     </>

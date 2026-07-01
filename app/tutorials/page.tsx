@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import TutorialsSection from '@/components/sections/TutorialsSection'
+import Reveal from '@/components/chrome/Reveal'
+import GradientText from '@/components/ui/GradientText'
 import { getAllTutorials } from '@/lib/tutorials'
 
 export const metadata: Metadata = {
@@ -13,24 +15,41 @@ export default async function TutorialsPage() {
 
   return (
     <>
-      <section className="hero hero-c" style={{ minHeight: 'auto' }}>
-        <div className="hero-c-noise" />
-        <div className="hero-c-canvas" style={{ opacity: 0.5 }} aria-hidden="true">
-          <div className="glow-blob b1" style={{ animationDuration: '30s' }} />
-          <div className="glow-blob b2" style={{ animationDuration: '40s' }} />
-        </div>
-        <div
-          className="wrap hero-content"
-          style={{ paddingTop: 80, paddingBottom: 80, position: 'relative', zIndex: 2 }}
-        >
-          <span className="hero-eyebrow" style={{ color: 'var(--cyan)', justifyContent: 'center' }}>
-            <span className="dot" />
-            UC AI Society
-          </span>
-          <h1 style={{ fontSize: 'clamp(40px,6vw,72px)', marginBottom: 16 }}>Tutorials</h1>
-          <p className="hero-lede" style={{ margin: '0 auto', textAlign: 'center' }}>
-            Practical guides written by members — work through them at your own pace.
-          </p>
+      <section className="dark-sec" style={{ paddingBlock: 'clamp(110px,16vh,190px)' }}>
+        <div className="wrap">
+          <Reveal>
+            <span className="mono eyebrow" style={{ color: '#00E0CC' }}>
+              TUTORIALS · UC·AI
+            </span>
+          </Reveal>
+          <Reveal variant="big" delay={0.05}>
+            <h1
+              style={{
+                fontWeight: 700,
+                fontSize: 'clamp(48px,9vw,128px)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.03em',
+                color: '#F2EFE6',
+                margin: '20px 0 0',
+              }}
+            >
+              Learn the <GradientText sheen>stack.</GradientText>
+            </h1>
+          </Reveal>
+          <Reveal variant="fade" delay={0.12}>
+            <p
+              style={{
+                marginTop: 26,
+                maxWidth: 620,
+                fontSize: 'clamp(16px,1.9vw,20px)',
+                lineHeight: 1.6,
+                color: 'rgba(242,239,230,0.72)',
+              }}
+            >
+              Practical guides written by members — prompt engineering, AI tooling, and ethics. Work
+              through them at your own pace.
+            </p>
+          </Reveal>
         </div>
       </section>
 

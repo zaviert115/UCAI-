@@ -1,20 +1,24 @@
 import type { Metadata } from 'next'
-import { Inter_Tight, JetBrains_Mono } from 'next/font/google'
+import { Space_Grotesk, Space_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
-import Nav from '@/components/layout/Nav'
+import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import NeuralBackground from '@/components/chrome/NeuralBackground'
+import ScrollProgress from '@/components/chrome/ScrollProgress'
+import CommandPalette from '@/components/chrome/CommandPalette'
+import { buildSearchIndex } from '@/lib/search'
 import './globals.css'
 
-const interTight = Inter_Tight({
-  variable: '--font-inter-tight',
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
 })
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: '--font-jetbrains-mono',
+const spaceMono = Space_Mono({
+  variable: '--font-space-mono',
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '700'],
 })
 
 export const metadata: Metadata = {
@@ -35,20 +39,23 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const searchIndex = await buildSearchIndex()
   return (
-    <html
-      lang="en"
-      className={`${interTight.variable} ${jetbrainsMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Nav />
-        <main className="flex-1">{children}</main>
+    <html lang="en" className={`${spaceGrotesk.variable} ${spaceMono.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        <NeuralBackground />
+        <ScrollProgress />
+        <Header />
+        <main className="flex-1" style={{ position: 'relative', zIndex: 1 }}>
+          {children}
+        </main>
         <Footer />
+        <CommandPalette index={searchIndex} />
         <Analytics />
       </body>
     </html>

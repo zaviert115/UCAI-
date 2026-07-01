@@ -14,10 +14,15 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const { prompt } = await req.json()
+  const { prompt, context } = await req.json()
   if (!prompt || typeof prompt !== 'string' || prompt.length > 500) {
     return NextResponse.json({ error: 'Invalid prompt' }, { status: 400 })
   }
+
+  const grounding =
+    typeof context === 'string' && context.length > 0
+      ? `\n\nUse only the following information about UC AI Society:\n${context.slice(0, 2000)}`
+      : ''
 
   try {
     const client = new OpenAI({ baseURL: NVIDIA_BASE_URL, apiKey })
@@ -29,7 +34,8 @@ export async function POST(req: NextRequest) {
         {
           role: 'system',
           content:
-            'You are a friendly UC AI Society assistant. Answer in 1-2 short sentences, max 50 words. Be helpful and enthusiastic.',
+            'You are a friendly UC AI Society assistant. Answer in 1-2 short sentences, max 50 words. Be helpful and enthusiastic.' +
+            grounding,
         },
         { role: 'user', content: prompt },
       ],

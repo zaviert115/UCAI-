@@ -1,33 +1,17 @@
-const projects = [
-  {
-    tag: 'NLP · 2025 Hackathon Winner',
-    title: 'Kōrero',
-    desc: 'Real-time AI transcription and translation tool for te reo Māori, built in 48 hours at the UC Hackathon.',
-    stack: ['Whisper', 'Next.js', 'Python', 'FastAPI'],
-  },
-  {
-    tag: 'EdTech · Workshop Project',
-    title: 'StudyBuddy',
-    desc: 'A RAG-powered study assistant that answers questions about your own lecture slides.',
-    stack: ['LangChain', 'Pinecone', 'React'],
-  },
-  {
-    tag: 'Computer Vision · Side Project',
-    title: 'Bin Sense',
-    desc: 'Uses a phone camera to classify waste into the right recycling bin. 94% accuracy on the UC campus bins.',
-    stack: ['YOLOv8', 'Flutter', 'TensorFlow'],
-  },
-]
+import DarkSection from '@/components/layout/DarkSection'
+import SectionHeader from '@/components/layout/SectionHeader'
+import Reveal from '@/components/chrome/Reveal'
+import { projects } from '@/lib/projects'
 
 const ArrowIcon = () => (
   <svg
-    className="proj-arrow"
     width="22"
     height="22"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
     strokeWidth="2"
+    style={{ color: '#22D3EE', flexShrink: 0 }}
   >
     <path d="M7 17L17 7M17 7H8M17 7v9" />
   </svg>
@@ -35,43 +19,82 @@ const ArrowIcon = () => (
 
 export default function ProjectsSection() {
   return (
-    <section className="projects-section" id="projects">
-      <div className="wrap">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: 16,
-          }}
-        >
-          <div>
-            <span className="section-eyebrow">Member projects</span>
-            <h2 className="section-title">Built by students at UC.</h2>
-            <p className="section-sub">
-              A taste of what comes out of our workshops and hackathons. Want yours featured? Submit
-              it on Discord.
-            </p>
-          </div>
-          <a
-            href="/projects"
-            className="btn btn-ghost"
-            style={{ borderColor: 'rgba(255,255,255,0.2)' }}
-          >
-            All projects →
-          </a>
-        </div>
-        <div className="projects-grid">
-          {projects.map((p, i) => (
-            <div className="proj" key={p.title}>
-              <ArrowIcon />
-              <div>
-                <span className="proj-tag">{p.tag}</span>
-                <h3>{p.title}</h3>
-                <p>{p.desc}</p>
+    <DarkSection id="projects" dataShape="koru">
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-end',
+          flexWrap: 'wrap',
+          gap: 16,
+          marginBottom: 48,
+        }}
+      >
+        <SectionHeader
+          index="03"
+          eyebrow="Member projects"
+          title="Built by students at UC."
+          sub="A taste of what comes out of our workshops and hackathons. Want yours featured? Submit it on Discord."
+          tone="dark"
+        />
+        <a href="/projects" className="btn btn--outline">
+          All projects →
+        </a>
+      </div>
+
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: 22,
+        }}
+      >
+        {projects.map((p, i) => (
+          <Reveal key={p.title} delay={i * 0.08}>
+            <div
+              className="card-dark"
+              style={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 22,
+                padding: 28,
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16 }}>
+                <div>
+                  <span
+                    className="eyebrow"
+                    style={{ fontSize: 10, color: '#00E0CC', display: 'block', marginBottom: 14 }}
+                  >
+                    {p.tag}
+                  </span>
+                  <h3
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 24,
+                      letterSpacing: '-0.02em',
+                      color: '#F2EFE6',
+                      margin: '0 0 10px',
+                    }}
+                  >
+                    {p.title}
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: 15,
+                      lineHeight: 1.55,
+                      color: 'rgba(242,239,230,0.7)',
+                      margin: 0,
+                    }}
+                  >
+                    {p.desc}
+                  </p>
+                </div>
+                <ArrowIcon />
               </div>
-              <div className="proj-vis" aria-hidden="true">
+
+              <div aria-hidden="true" style={{ marginTop: 'auto' }}>
                 {i === 0 && (
                   <svg width="100%" height="80" viewBox="0 0 300 80">
                     {[...Array(40)].map((_, j) => (
@@ -81,7 +104,7 @@ export default function ProjectsSection() {
                         y={40 - Math.abs(Math.sin(j * 0.4)) * 30}
                         width="3"
                         height={Math.abs(Math.sin(j * 0.4)) * 60 + 5}
-                        fill="oklch(0.82 0.139 200)"
+                        fill="#22D3EE"
                         opacity={0.3 + (j % 5) * 0.15}
                       />
                     ))}
@@ -92,17 +115,11 @@ export default function ProjectsSection() {
                     <path
                       d="M10,50 Q40,10 80,30 T150,20 T190,40"
                       fill="none"
-                      stroke="oklch(0.82 0.139 200)"
+                      stroke="#22D3EE"
                       strokeWidth="2"
                     />
                     {[10, 80, 150, 190].map((x, k) => (
-                      <circle
-                        key={k}
-                        cx={x}
-                        cy={[50, 30, 20, 40][k]}
-                        r="4"
-                        fill="oklch(0.82 0.139 200)"
-                      />
+                      <circle key={k} cx={x} cy={[50, 30, 20, 40][k]} r="4" fill="#22D3EE" />
                     ))}
                   </svg>
                 )}
@@ -115,22 +132,34 @@ export default function ProjectsSection() {
                           width: 22,
                           height: 22,
                           borderRadius: 5,
-                          background: v ? 'oklch(0.82 0.139 200)' : 'rgba(255,255,255,0.08)',
+                          background: v ? '#22D3EE' : 'rgba(255,255,255,0.08)',
                         }}
                       />
                     ))}
                   </div>
                 )}
               </div>
-              <div className="proj-stack">
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {p.stack.map((s) => (
-                  <span key={s}>{s}</span>
+                  <span
+                    key={s}
+                    className="mono"
+                    style={{
+                      fontSize: 11,
+                      padding: '4px 10px',
+                      border: '1px solid rgba(255,255,255,0.16)',
+                      color: 'rgba(242,239,230,0.7)',
+                    }}
+                  >
+                    {s}
+                  </span>
                 ))}
               </div>
             </div>
-          ))}
-        </div>
+          </Reveal>
+        ))}
       </div>
-    </section>
+    </DarkSection>
   )
 }

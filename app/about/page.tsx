@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import PageContainer from '@/components/layout/PageContainer'
 import TeamCard from '@/components/sections/TeamCard'
+import Reveal from '@/components/chrome/Reveal'
+import GradientText from '@/components/ui/GradientText'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -42,19 +44,58 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero */}
-      <section className="bg-navy-800 text-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">About UC AI Society</h1>
-          <p className="text-white/70 text-lg max-w-xl">
-            A student-led club at the University of Canterbury.
-          </p>
+      <section className="dark-sec" style={{ paddingBlock: 'clamp(110px,16vh,190px)' }}>
+        <div className="wrap">
+          <Reveal>
+            <span className="mono eyebrow" style={{ color: '#00E0CC' }}>
+              ABOUT · UC·AI
+            </span>
+          </Reveal>
+          <Reveal variant="big" delay={0.05}>
+            <h1
+              style={{
+                fontWeight: 700,
+                fontSize: 'clamp(44px,8vw,120px)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.03em',
+                color: '#F2EFE6',
+                margin: '20px 0 0',
+              }}
+            >
+              What is <GradientText sheen>UC·AI?</GradientText>
+            </h1>
+          </Reveal>
+          <Reveal variant="fade" delay={0.12}>
+            <p
+              style={{
+                marginTop: 26,
+                maxWidth: 620,
+                fontSize: 'clamp(16px,1.9vw,20px)',
+                lineHeight: 1.6,
+                color: 'rgba(242,239,230,0.72)',
+              }}
+            >
+              A student-led club at the University of Canterbury, helping students understand and
+              build with AI in practical, ethical ways.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       {/* Mission */}
       <PageContainer>
         <div className="max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-bold text-navy-800 mb-6">Our mission</h2>
+          <h2
+            className="text-navy-800 mb-6"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(28px,4vw,48px)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1,
+            }}
+          >
+            Our mission
+          </h2>
           <div className="prose prose-slate max-w-none text-foreground leading-relaxed space-y-4">
             <p className="text-lg">
               UC AI (artificial intelligence) Society is a student-led club at the University of
@@ -78,7 +119,20 @@ export default function AboutPage() {
       {/* What we do */}
       <section className="bg-navy-50 py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-navy-800 mb-10">What we do</h2>
+          <span className="mono eyebrow" style={{ color: '#2B53FF' }}>
+            WHAT WE DO
+          </span>
+          <h2
+            className="text-navy-800 mb-10 mt-4"
+            style={{
+              fontWeight: 700,
+              fontSize: 'clamp(28px,4vw,48px)',
+              letterSpacing: '-0.03em',
+              lineHeight: 1,
+            }}
+          >
+            From prompts to projects.
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {whatWeDo.map(({ title, desc }) => (
               <div key={title} className="rounded-xl bg-white border border-border p-6">
@@ -92,7 +146,20 @@ export default function AboutPage() {
 
       {/* Team */}
       <PageContainer>
-        <h2 className="text-2xl md:text-3xl font-bold text-navy-800 mb-2">Meet the committee</h2>
+        <span className="mono eyebrow" style={{ color: '#2B53FF' }}>
+          THE TEAM
+        </span>
+        <h2
+          className="text-navy-800 mb-2 mt-4"
+          style={{
+            fontWeight: 700,
+            fontSize: 'clamp(28px,4vw,48px)',
+            letterSpacing: '-0.03em',
+            lineHeight: 1,
+          }}
+        >
+          Meet the committee
+        </h2>
         <p className="text-muted-foreground mb-10">
           The people keeping UC AI SOC running. Interested in joining the committee? Get in touch.
         </p>

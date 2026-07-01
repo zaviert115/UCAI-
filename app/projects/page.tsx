@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Reveal from '@/components/chrome/Reveal'
+import GradientText from '@/components/ui/GradientText'
+import { projects } from '@/lib/projects'
 
 export const metadata: Metadata = {
   title: 'Projects',
@@ -7,108 +10,132 @@ export const metadata: Metadata = {
     'Member projects from UC AI Society — built at workshops, hackathons, and in spare time.',
 }
 
-const projects = [
-  {
-    tag: 'NLP · 2025 Hackathon Winner',
-    title: 'Kōrero',
-    desc: 'Real-time AI transcription and translation tool for te reo Māori, built in 48 hours at the UC Hackathon.',
-    stack: ['Whisper', 'Next.js', 'Python', 'FastAPI'],
-  },
-  {
-    tag: 'EdTech · Workshop Project',
-    title: 'StudyBuddy',
-    desc: 'A RAG-powered study assistant that answers questions about your own lecture slides.',
-    stack: ['LangChain', 'Pinecone', 'React'],
-  },
-  {
-    tag: 'Computer Vision · Side Project',
-    title: 'Bin Sense',
-    desc: 'Uses a phone camera to classify waste into the right recycling bin. 94% accuracy on the UC campus bins.',
-    stack: ['YOLOv8', 'Flutter', 'TensorFlow'],
-  },
-]
-
 export default function ProjectsPage() {
   return (
     <>
-      <section className="hero hero-c" style={{ minHeight: 'auto' }}>
-        <div className="hero-c-noise" />
-        <div className="hero-c-canvas" style={{ opacity: 0.5 }} aria-hidden="true">
-          <div className="glow-blob b1" style={{ animationDuration: '30s' }} />
-          <div className="glow-blob b2" style={{ animationDuration: '40s' }} />
-        </div>
-        <div
-          className="wrap hero-content"
-          style={{ paddingTop: 80, paddingBottom: 80, position: 'relative', zIndex: 2 }}
-        >
-          <span className="hero-eyebrow" style={{ color: 'var(--cyan)', justifyContent: 'center' }}>
-            <span className="dot" />
-            UC AI Society
-          </span>
-          <h1 style={{ fontSize: 'clamp(40px,6vw,72px)', marginBottom: 16 }}>Member Projects</h1>
-          <p className="hero-lede" style={{ margin: '0 auto', textAlign: 'center' }}>
-            Built by students at UC — at workshops, hackathons, and in spare time.
-          </p>
+      <section className="dark-sec" style={{ paddingBlock: 'clamp(110px,16vh,190px)' }}>
+        <div className="wrap">
+          <Reveal>
+            <span className="mono eyebrow" style={{ color: '#00E0CC' }}>
+              PROJECTS · UC·AI
+            </span>
+          </Reveal>
+          <Reveal variant="big" delay={0.05}>
+            <h1
+              style={{
+                fontWeight: 700,
+                fontSize: 'clamp(44px,8vw,120px)',
+                lineHeight: 0.95,
+                letterSpacing: '-0.03em',
+                color: '#F2EFE6',
+                margin: '20px 0 0',
+              }}
+            >
+              Built by <GradientText sheen>students.</GradientText>
+            </h1>
+          </Reveal>
+          <Reveal variant="fade" delay={0.12}>
+            <p
+              style={{
+                marginTop: 26,
+                maxWidth: 620,
+                fontSize: 'clamp(16px,1.9vw,20px)',
+                lineHeight: 1.6,
+                color: 'rgba(242,239,230,0.72)',
+              }}
+            >
+              Shipped at workshops, hackathons, and in spare time. Want yours featured? Submit it on
+              Discord.
+            </p>
+          </Reveal>
         </div>
       </section>
 
-      <section className="projects-section" style={{ padding: '100px 0' }}>
+      <section className="dark-sec section-pad" style={{ paddingTop: 0 }}>
         <div className="wrap">
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              flexWrap: 'wrap',
-              gap: 16,
-              marginBottom: 48,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))',
+              gap: 1,
+              border: '1px solid rgba(255,255,255,0.12)',
             }}
           >
-            <div>
-              <span className="section-eyebrow" style={{ color: 'var(--cyan)' }}>
-                Member projects
-              </span>
-              <h2 className="section-title" style={{ color: 'white' }}>
-                Built by students at UC.
-              </h2>
-              <p className="section-sub" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                Want yours featured? Submit it on Discord.
-              </p>
-            </div>
-          </div>
-          <div className="projects-grid">
-            {projects.map((p) => (
-              <div className="proj" key={p.title}>
+            {projects.map((p, i) => (
+              <Reveal
+                key={p.title}
+                delay={i * 0.06}
+                className="card-dark"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 28,
+                  padding: 32,
+                  minHeight: 280,
+                }}
+              >
                 <div>
-                  <span className="proj-tag">{p.tag}</span>
-                  <h3>{p.title}</h3>
-                  <p>{p.desc}</p>
+                  <span
+                    className="mono"
+                    style={{
+                      fontSize: 12,
+                      letterSpacing: '0.12em',
+                      textTransform: 'uppercase',
+                      color: '#00E0CC',
+                    }}
+                  >
+                    {p.tag}
+                  </span>
+                  <h3
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 28,
+                      letterSpacing: '-0.02em',
+                      color: '#F2EFE6',
+                      margin: '14px 0 10px',
+                    }}
+                  >
+                    {p.title}
+                  </h3>
+                  <p style={{ fontSize: 15, lineHeight: 1.6, color: 'rgba(242,239,230,0.66)' }}>
+                    {p.desc}
+                  </p>
                 </div>
-                <div className="proj-stack">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {p.stack.map((s) => (
-                    <span key={s}>{s}</span>
+                    <span
+                      key={s}
+                      className="mono"
+                      style={{
+                        fontSize: 11,
+                        letterSpacing: '0.06em',
+                        color: 'rgba(242,239,230,0.7)',
+                        border: '1px solid rgba(255,255,255,0.16)',
+                        padding: '4px 9px',
+                        borderRadius: 999,
+                      }}
+                    >
+                      {s}
+                    </span>
                   ))}
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
 
-          <div style={{ textAlign: 'center', marginTop: 64 }}>
+          <div style={{ textAlign: 'center', marginTop: 56 }}>
             <p
+              className="mono"
               style={{
-                color: 'rgba(255,255,255,0.5)',
-                fontSize: 14,
-                marginBottom: 16,
-                fontFamily: 'var(--font-jetbrains-mono), monospace',
+                color: 'rgba(242,239,230,0.5)',
+                fontSize: 13,
+                marginBottom: 18,
               }}
             >
               More projects coming soon — we&apos;re just getting started.
             </p>
-            <Link
-              href="/contact"
-              className="btn btn-ghost"
-              style={{ borderColor: 'rgba(255,255,255,0.2)' }}
-            >
+            <Link href="/contact" className="btn btn--outline">
               Submit your project →
             </Link>
           </div>

@@ -9,7 +9,7 @@ export default function OGImage() {
   return new ImageResponse(
     <div
       style={{
-        background: '#0F2A44',
+        background: '#070710',
         width: '100%',
         height: '100%',
         display: 'flex',
@@ -20,25 +20,33 @@ export default function OGImage() {
         fontFamily: 'sans-serif',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px' }}>
         <div
           style={{
-            width: '8px',
+            width: '10px',
             height: '64px',
-            background: '#22D3EE',
-            borderRadius: '4px',
+            background: 'linear-gradient(180deg, #00E0CC, #2B53FF, #7A2BFF)',
+            borderRadius: '5px',
           }}
         />
-        <span style={{ color: '#22D3EE', fontSize: '32px', fontWeight: 700, letterSpacing: '4px' }}>
-          UC AI
+        <span
+          style={{
+            color: '#00E0CC',
+            fontSize: '32px',
+            fontWeight: 700,
+            letterSpacing: '6px',
+          }}
+        >
+          UC·AI
         </span>
       </div>
       <div
         style={{
-          color: '#ffffff',
-          fontSize: '72px',
+          color: '#F2EFE6',
+          fontSize: '76px',
           fontWeight: 800,
-          lineHeight: 1.1,
+          lineHeight: 1.05,
+          letterSpacing: '-2px',
           maxWidth: '900px',
         }}
       >
@@ -46,9 +54,18 @@ export default function OGImage() {
       </div>
       <div
         style={{
-          color: 'rgba(255,255,255,0.6)',
+          width: '180px',
+          height: '8px',
+          marginTop: '32px',
+          borderRadius: '4px',
+          background: 'linear-gradient(100deg, #00E0CC, #2B53FF, #7A2BFF)',
+        }}
+      />
+      <div
+        style={{
+          color: 'rgba(242,239,230,0.6)',
           fontSize: '28px',
-          marginTop: '24px',
+          marginTop: '28px',
           maxWidth: '760px',
           lineHeight: 1.4,
         }}

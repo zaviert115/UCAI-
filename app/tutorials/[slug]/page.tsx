@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { Clock, User, Calendar } from 'lucide-react'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getAllTutorials, getTutorialBySlug } from '@/lib/tutorials'
-import { Badge } from '@/components/ui/badge'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -39,19 +38,31 @@ export default async function TutorialPage({ params }: Props) {
 
   return (
     <>
-      <section className="bg-navy-800 text-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <section
+        style={{ background: 'var(--bg, #070710)' }}
+        className="text-[#F2EFE6] py-16 md:py-24"
+      >
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/tutorials"
-            className="text-white/60 text-sm hover:text-white transition-colors mb-6 inline-flex items-center gap-1"
+            className="mono text-[11px] uppercase tracking-[0.2em] text-[#F2EFE6]/55 hover:text-[#00E0CC] transition-colors mb-8 inline-flex items-center gap-1.5"
           >
             &larr; All tutorials
           </Link>
-          <Badge className="mb-4 block w-fit bg-brand-cyan text-navy-800 hover:bg-brand-cyan-dark">
-            {tutorial.category}
-          </Badge>
-          <h1 className="text-3xl md:text-4xl font-bold mb-6 max-w-2xl">{tutorial.title}</h1>
-          <div className="flex flex-wrap gap-4 text-white/80 text-sm">
+          <div className="eyebrow text-[#00E0CC] mb-5 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span>{tutorial.category}</span>
+            <span className="text-[#F2EFE6]/30">·</span>
+            <span className="text-[#F2EFE6]/70">{tutorial.author}</span>
+            <span className="text-[#F2EFE6]/30">·</span>
+            <span className="text-[#F2EFE6]/70">{tutorial.readTime} min read</span>
+          </div>
+          <h1
+            className="text-4xl md:text-6xl font-bold mb-8 max-w-3xl"
+            style={{ letterSpacing: '-0.03em', lineHeight: 1.05 }}
+          >
+            {tutorial.title}
+          </h1>
+          <div className="mono flex flex-wrap gap-4 text-[#F2EFE6]/70 text-xs uppercase tracking-[0.12em]">
             <span className="flex items-center gap-1.5">
               <User size={14} aria-hidden="true" />
               {tutorial.author}
@@ -68,18 +79,20 @@ export default async function TutorialPage({ params }: Props) {
         </div>
       </section>
 
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <article className="prose prose-slate max-w-none">
-          <MDXRemote source={tutorial.content} />
-        </article>
+      <div className="paper">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <article className="prose-uc max-w-none">
+            <MDXRemote source={tutorial.content} />
+          </article>
 
-        <div className="mt-12 pt-8 border-t border-border">
-          <Link
-            href="/tutorials"
-            className="text-sm font-medium text-navy-800 hover:text-brand-cyan-dark transition-colors"
-          >
-            &larr; Back to tutorials
-          </Link>
+          <div className="mt-14 pt-8 border-t border-[#0B0B0F]/15">
+            <Link
+              href="/tutorials"
+              className="mono text-xs uppercase tracking-[0.16em] font-bold text-[#2B53FF] hover:text-[#7A2BFF] transition-colors"
+            >
+              &larr; Back to tutorials
+            </Link>
+          </div>
         </div>
       </div>
     </>

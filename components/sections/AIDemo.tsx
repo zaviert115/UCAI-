@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import DarkSection from '@/components/layout/DarkSection'
+import SectionHeader from '@/components/layout/SectionHeader'
 
 const EXAMPLES = ['What is a transformer?', 'How do I start with AI?', 'Is the club really free?']
 
@@ -28,27 +30,22 @@ export default function AIDemo() {
   }
 
   return (
-    <section className="ai-demo-section">
-      <div className="wrap">
-        <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
-          <span className="section-eyebrow">Try it before you join</span>
-          <h2 className="section-title">Ask anything about UC AI.</h2>
-          <p className="section-sub" style={{ margin: '12px auto 32px' }}>
-            A real model, running live. Powered by the same APIs we teach with.
-          </p>
-        </div>
+    <DarkSection dataShape="ai">
+      <div style={{ maxWidth: 760, margin: '0 auto' }}>
+        <SectionHeader
+          index="08"
+          eyebrow="Ask UC·AI"
+          title="Try the assistant."
+          sub="A real model, running live. Powered by the same APIs we teach with."
+          tone="dark"
+          align="center"
+        />
+
         <div
-          style={{
-            maxWidth: 720,
-            margin: '0 auto',
-            background: 'white',
-            border: '1px solid var(--brand-border)',
-            borderRadius: 16,
-            padding: 24,
-            boxShadow: '0 12px 40px -20px rgba(15,42,68,0.18)',
-          }}
+          className="card-dark"
+          style={{ marginTop: 48, padding: 24, display: 'flex', flexDirection: 'column', gap: 14 }}
         >
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <input
               type="text"
               value={q}
@@ -56,55 +53,83 @@ export default function AIDemo() {
               onKeyDown={(e) => e.key === 'Enter' && ask(q)}
               placeholder="What is RAG?"
               style={{
-                flex: 1,
-                border: '1px solid var(--brand-border)',
-                borderRadius: 10,
-                padding: '12px 14px',
+                flex: '1 1 220px',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.18)',
+                color: '#F2EFE6',
+                padding: '13px 15px',
                 fontFamily: 'inherit',
                 fontSize: 15,
                 outline: 'none',
-                color: 'var(--navy-900)',
               }}
             />
             <button
-              className="btn btn-dark"
+              className="btn btn--grad"
               disabled={busy || !q.trim()}
               onClick={() => ask(q)}
-              style={{ opacity: busy ? 0.5 : 1 }}
+              style={{ opacity: busy || !q.trim() ? 0.5 : 1 }}
             >
               {busy ? 'Thinking…' : 'Ask →'}
             </button>
           </div>
-          <div style={{ display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' }}>
+
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {EXAMPLES.map((ex) => (
               <button
                 key={ex}
-                className="chip"
+                className="mono"
                 onClick={() => {
                   setQ(ex)
                   ask(ex)
+                }}
+                style={{
+                  fontSize: 11,
+                  padding: '6px 12px',
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.18)',
+                  color: 'rgba(242,239,230,0.72)',
+                  cursor: 'pointer',
                 }}
               >
                 {ex}
               </button>
             ))}
           </div>
+
           {(a || busy) && (
             <div
+              className="card-glass"
               style={{
-                marginTop: 18,
-                padding: 16,
-                background: 'var(--navy-50)',
-                borderRadius: 10,
+                marginTop: 4,
+                padding: 18,
                 fontSize: 14.5,
                 lineHeight: 1.6,
-                color: 'var(--navy-900)',
-                minHeight: 60,
-                fontFamily: busy ? 'var(--font-jetbrains-mono), monospace' : 'inherit',
+                color: 'rgba(242,239,230,0.88)',
+                minHeight: 64,
               }}
             >
               {busy && !a ? (
-                <span style={{ color: 'var(--brand-muted)' }}>generating response…</span>
+                <span
+                  className="mono"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    fontSize: 13,
+                    color: 'rgba(242,239,230,0.6)',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: 7,
+                      height: 7,
+                      borderRadius: '50%',
+                      background: '#00E0CC',
+                      animation: 'dotpulse 1s infinite',
+                    }}
+                  />
+                  Thinking…
+                </span>
               ) : (
                 a
               )}
@@ -112,6 +137,6 @@ export default function AIDemo() {
           )}
         </div>
       </div>
-    </section>
+    </DarkSection>
   )
 }
