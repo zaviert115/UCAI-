@@ -11,14 +11,21 @@ export const metadata: Metadata = {
 }
 
 const team = [
-  { name: 'Name', role: 'President', bio: 'Placeholder bio — update via PR.' },
   {
-    name: 'Name',
-    role: 'Director of Technology',
-    bio: 'Placeholder bio — update via PR.',
+    name: 'Ryder Earp-Jones',
+    role: 'President',
+    bio: 'Leading the club and keeping everything moving.',
   },
-  { name: 'Name', role: 'Events Lead', bio: 'Placeholder bio — update via PR.' },
-  { name: 'Name', role: 'Marketing Lead', bio: 'Placeholder bio — update via PR.' },
+  {
+    name: 'Owen Leary',
+    role: 'Vice President',
+    bio: 'Supporting club operations and the member experience.',
+  },
+  {
+    name: 'Zavier Taylor',
+    role: 'Head of Technology',
+    bio: "Building and maintaining the club's tech stack.",
+  },
 ]
 
 const whatWeDo = [
@@ -163,7 +170,7 @@ export default function AboutPage() {
         <p className="text-muted-foreground mb-10">
           The people keeping UC AI SOC running. Interested in joining the committee? Get in touch.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {team.map((member) => (
             <TeamCard key={member.role} {...member} />
           ))}

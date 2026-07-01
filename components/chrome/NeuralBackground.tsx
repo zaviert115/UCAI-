@@ -95,37 +95,52 @@ function shapeKoru(N: number): Pt[] {
   return sampleAlong([poly], N)
 }
 function shapeNZ(N: number): Pt[] {
+  // North Island — thin Northland tail (top), East Cape (right), Taranaki
+  // bump (left), pointed Wellington tip (bottom); sides kept full so it reads
+  // as a landmass rather than a star.
   const north = [
-    [0.3, -0.85],
-    [0.42, -0.7],
-    [0.4, -0.55],
-    [0.52, -0.52],
-    [0.61, -0.45],
-    [0.75, -0.4],
-    [0.62, -0.28],
-    [0.55, -0.16],
-    [0.45, -0.08],
-    [0.33, -0.16],
-    [0.18, -0.34],
-    [0.28, -0.5],
-    [0.22, -0.68],
-    [0.3, -0.85],
+    [0.33, -0.95], // Cape Reinga
+    [0.4, -0.86], // Northland
+    [0.44, -0.76],
+    [0.47, -0.7], // Auckland
+    [0.55, -0.68], // Coromandel / BoP
+    [0.64, -0.65],
+    [0.75, -0.6], // East Cape
+    [0.68, -0.55],
+    [0.6, -0.5], // Hawke's Bay
+    [0.6, -0.44],
+    [0.54, -0.36], // Wairarapa
+    [0.46, -0.28], // Wellington (south tip)
+    [0.42, -0.36],
+    [0.34, -0.42],
+    [0.27, -0.48], // Taranaki (west bump)
+    [0.33, -0.55],
+    [0.34, -0.64],
+    [0.31, -0.76],
+    [0.3, -0.86], // Northland west
+    [0.33, -0.95],
   ]
+  // South Island — comma shape on a NE→SW diagonal: wide at Marlborough (top),
+  // Banks Peninsula bump (east), pointed Bluff (bottom), jagged Fiordland (SW).
   const south = [
-    [0.2, -0.02],
-    [0.06, 0.18],
-    [0.02, 0.34],
-    [0.11, 0.37],
-    [0.0, 0.41],
-    [-0.18, 0.55],
-    [-0.3, 0.72],
-    [-0.43, 0.79],
-    [-0.62, 0.62],
-    [-0.5, 0.4],
-    [-0.4, 0.2],
-    [-0.2, 0.02],
-    [-0.08, -0.04],
-    [0.2, -0.02],
+    [0.24, -0.16], // Marlborough (top)
+    [0.2, -0.06],
+    [0.1, 0.06], // Kaikōura
+    [0.02, 0.2],
+    [-0.05, 0.29], // Banks Peninsula
+    [-0.02, 0.34],
+    [-0.12, 0.44], // Otago
+    [-0.22, 0.56],
+    [-0.34, 0.68], // Southland
+    [-0.48, 0.76], // Bluff (bottom)
+    [-0.58, 0.66], // Fiordland SW
+    [-0.52, 0.52],
+    [-0.44, 0.4], // Fiordland west
+    [-0.34, 0.26], // West Coast
+    [-0.22, 0.12], // glaciers
+    [-0.1, 0.0], // Nelson / Tasman
+    [0.06, -0.1],
+    [0.24, -0.16],
   ]
   return sampleAlong([north, south], N)
 }
@@ -227,7 +242,7 @@ export default function NeuralBackground() {
       // additive vivid glows
       c.globalCompositeOperation = 'lighter'
       for (const g of glows) {
-        g.phase += g.spd * MSPEED
+        g.phase += g.spd * MSPEED * 1.3
         const cx = (g.bx + Math.cos(g.phase) * g.amp + mx * g.par) * w
         const cy = (g.by + Math.sin(g.phase * 0.9) * g.amp + my * g.par) * h
         const rad = g.r * Math.min(w, h)
@@ -279,8 +294,9 @@ export default function NeuralBackground() {
 
       // 3D field (rotation damped while a shape is locked)
       const rd = 1 - 0.82 * lock
-      const ry = (time * 0.00006 * MROT + mx * 0.7) * rd
-      const rx = my * 0.45 * rd
+      // a touch more idle life: faster autonomous spin + a slow vertical sway
+      const ry = (time * 0.00009 * MROT + mx * 0.7) * rd
+      const rx = (my * 0.45 + Math.sin(time * 0.00022) * 0.06) * rd
       const cosY = Math.cos(ry)
       const sinY = Math.sin(ry)
       const cosX = Math.cos(rx)
