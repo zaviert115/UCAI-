@@ -214,6 +214,11 @@ export default function NeuralBackground() {
     const t0 = performance.now()
     let raf = 0
 
+    // scroll velocity → energises the field (brighter links + motion streaks)
+    let prevScroll = window.scrollY
+    let scrollVel = 0
+    let scrollDir = 0
+
     let scenes: { el: Element; shape: string }[] = []
     const captureScenes = () => {
       scenes = Array.from(document.querySelectorAll('[data-shape]')).map((el) => ({
@@ -234,6 +239,14 @@ export default function NeuralBackground() {
       const h = cv.height
       const time = t - t0
       c.clearRect(0, 0, w, h)
+
+      // per-frame scroll velocity: jumps up on fast scroll, decays gently
+      const sYnow = window.scrollY
+      const dScroll = sYnow - prevScroll
+      prevScroll = sYnow
+      if (Math.abs(dScroll) > 0.01) scrollDir = Math.sign(dScroll)
+      scrollVel = Math.max(Math.min(1, Math.abs(dScroll) / 55), scrollVel * 0.9)
+
       mouse.x += (mouse.tx - mouse.x) * 0.05
       mouse.y += (mouse.ty - mouse.y) * 0.05
       const mx = mouse.x - 0.5
@@ -307,7 +320,7 @@ export default function NeuralBackground() {
       // 3D field (rotation damped while a shape is locked)
       const rd = 1 - 0.82 * lock
       // a touch more idle life: faster autonomous spin + a slow vertical sway
-      const ry = (time * 0.00009 * MROT + mx * 0.7) * rd
+      const ry = (time * 0.00009 * MROT + mx * 0.7 + scrollDir * scrollVel * 0.12) * rd
       const rx = (my * 0.45 + Math.sin(time * 0.00022) * 0.06) * rd
       const cosY = Math.cos(ry)
       const sinY = Math.sin(ry)
@@ -348,8 +361,9 @@ export default function NeuralBackground() {
         }
       }
 
-      // connections
-      const thr = 118 * dpr
+      // connections (reach + brightness scale up with scroll velocity)
+      const thr = (118 + 46 * scrollVel) * dpr
+      const lineBoost = 0.13 + 0.26 * scrollVel
       c.lineWidth = 1 * dpr
       for (let i = 0; i < pr.length; i++) {
         for (let j = i + 1; j < pr.length; j++) {
@@ -357,7 +371,7 @@ export default function NeuralBackground() {
           const dy = pr[i].sy - pr[j].sy
           const d = Math.sqrt(dx * dx + dy * dy)
           if (d < thr) {
-            const a = (1 - d / thr) * 0.13 * Math.min(pr[i].pz, pr[j].pz)
+            const a = (1 - d / thr) * lineBoost * Math.min(pr[i].pz, pr[j].pz)
             c.strokeStyle = `rgba(170,195,255,${a.toFixed(3)})`
             c.beginPath()
             c.moveTo(pr[i].sx, pr[i].sy)
@@ -366,10 +380,20 @@ export default function NeuralBackground() {
           }
         }
       }
-      // dots
+      // dots (+ motion streaks when scrolling fast)
+      const streakLen = scrollVel > 0.06 ? scrollVel * 22 * dpr : 0
       for (const q of pr) {
+        if (streakLen) {
+          c.strokeStyle = `rgba(150,180,255,${(0.35 * scrollVel * q.pz).toFixed(3)})`
+          c.lineWidth = Math.max(0.6, (q.pz - 0.4) * 2.2) * dpr
+          c.beginPath()
+          c.moveTo(q.sx, q.sy)
+          c.lineTo(q.sx, q.sy - scrollDir * streakLen)
+          c.stroke()
+        }
         const s = Math.max(0.6, (q.pz - 0.4) * 3.2) * dpr
-        c.fillStyle = `rgba(232,240,255,${(0.5 * q.pz).toFixed(3)})`
+        const b = Math.min(1, (0.5 + 0.4 * scrollVel) * q.pz)
+        c.fillStyle = `rgba(232,240,255,${b.toFixed(3)})`
         c.beginPath()
         c.arc(q.sx, q.sy, s, 0, 6.2832)
         c.fill()
