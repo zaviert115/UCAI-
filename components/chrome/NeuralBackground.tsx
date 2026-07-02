@@ -95,52 +95,62 @@ function shapeKoru(N: number): Pt[] {
   return sampleAlong([poly], N)
 }
 function shapeNZ(N: number): Pt[] {
-  // North Island — thin Northland tail (top), East Cape (right), Taranaki
-  // bump (left), pointed Wellington tip (bottom); sides kept full so it reads
-  // as a landmass rather than a star.
+  // Coordinates are north-up (negative y = north), tilted on NZ's real
+  // NNE→SSW long axis. Traced clockwise around each island's coastline with
+  // its recognisable features so the particle field reads clearly as Aotearoa.
   const north = [
-    [0.33, -0.95], // Cape Reinga
-    [0.4, -0.86], // Northland
-    [0.44, -0.76],
-    [0.47, -0.7], // Auckland
-    [0.55, -0.68], // Coromandel / BoP
-    [0.64, -0.65],
-    [0.75, -0.6], // East Cape
-    [0.68, -0.55],
-    [0.6, -0.5], // Hawke's Bay
-    [0.6, -0.44],
-    [0.54, -0.36], // Wairarapa
-    [0.46, -0.28], // Wellington (south tip)
-    [0.42, -0.36],
-    [0.34, -0.42],
-    [0.27, -0.48], // Taranaki (west bump)
-    [0.33, -0.55],
-    [0.34, -0.64],
-    [0.31, -0.76],
-    [0.3, -0.86], // Northland west
-    [0.33, -0.95],
+    [0.16, -0.97], // Cape Reinga
+    [0.22, -0.89],
+    [0.29, -0.8], // Northland (Bay of Islands)
+    [0.37, -0.73], // Auckland
+    [0.47, -0.69], // Coromandel / Bay of Plenty (gentle bulge)
+    [0.57, -0.64], // Whakatāne
+    [0.66, -0.58], // East Cape (rounded far-east point)
+    [0.62, -0.51], // Gisborne
+    [0.56, -0.46], // Hawke Bay (shallow)
+    [0.54, -0.4], // Cape Kidnappers
+    [0.49, -0.33], // Wairarapa
+    [0.42, -0.27], // Cape Palliser
+    [0.37, -0.26], // Wellington (south tip)
+    [0.33, -0.33], // Kāpiti coast
+    [0.28, -0.41], // Whanganui
+    [0.22, -0.47], // south Taranaki
+    [0.16, -0.51], // Taranaki (Cape Egmont — west bump)
+    [0.19, -0.58], // north Taranaki
+    [0.21, -0.66], // Kāwhia (straight-ish Tasman coast)
+    [0.2, -0.75], // west coast
+    [0.18, -0.85], // Ninety Mile Beach (west Northland)
+    [0.16, -0.92],
+    [0.16, -0.97],
   ]
-  // South Island — comma shape on a NE→SW diagonal: wide at Marlborough (top),
-  // Banks Peninsula bump (east), pointed Bluff (bottom), jagged Fiordland (SW).
   const south = [
-    [0.24, -0.16], // Marlborough (top)
-    [0.2, -0.06],
-    [0.1, 0.06], // Kaikōura
-    [0.02, 0.2],
-    [-0.05, 0.29], // Banks Peninsula
-    [-0.02, 0.34],
-    [-0.12, 0.44], // Otago
-    [-0.22, 0.56],
-    [-0.34, 0.68], // Southland
-    [-0.48, 0.76], // Bluff (bottom)
-    [-0.58, 0.66], // Fiordland SW
-    [-0.52, 0.52],
-    [-0.44, 0.4], // Fiordland west
-    [-0.34, 0.26], // West Coast
-    [-0.22, 0.12], // glaciers
-    [-0.1, 0.0], // Nelson / Tasman
-    [0.06, -0.1],
-    [0.24, -0.16],
+    [0.2, -0.13], // Cape Campbell / Marlborough (NE)
+    [0.12, -0.03],
+    [0.04, 0.05], // Kaikōura
+    [-0.03, 0.13], // Pegasus Bay / Christchurch
+    [0.04, 0.18], // Banks Peninsula (east bump)
+    [-0.05, 0.23], // Canterbury Bight
+    [-0.11, 0.31], // Timaru
+    [-0.18, 0.41], // Ōamaru
+    [-0.24, 0.48], // Otago Peninsula (east bump)
+    [-0.32, 0.55], // the Catlins
+    [-0.42, 0.61], // Bluff (south tip)
+    [-0.52, 0.58], // Southland coast
+    [-0.6, 0.52], // Fiordland south
+    [-0.65, 0.45], // Fiordland SW (jagged)
+    [-0.59, 0.4],
+    [-0.66, 0.34], // Fiordland
+    [-0.57, 0.26],
+    [-0.5, 0.18], // West Coast
+    [-0.42, 0.08], // glaciers
+    [-0.34, -0.02],
+    [-0.26, -0.1], // Westport
+    [-0.16, -0.16], // Golden Bay
+    [-0.06, -0.2], // Farewell Spit (hooks east)
+    [0.02, -0.15], // Nelson / Tasman Bay
+    [0.1, -0.16], // Marlborough Sounds
+    [0.16, -0.13],
+    [0.2, -0.13],
   ]
   return sampleAlong([north, south], N)
 }
