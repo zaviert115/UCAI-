@@ -693,14 +693,14 @@
 }
 @keyframes wipe {
   0% {
-    transform: translateX(-101%) skewX(-8deg);
+    transform: translateX(-130%) skewX(-8deg);
   }
   44%,
   56% {
     transform: translateX(0) skewX(-8deg);
   }
   100% {
-    transform: translateX(101%) skewX(-8deg);
+    transform: translateX(130%) skewX(-8deg);
   }
 }
 @keyframes wipeMark {
@@ -846,6 +846,34 @@
 .card-paper:hover {
   border-color: rgba(11, 11, 15, 0.4);
   background: #e9e5d8;
+}
+
+/* cursor-following sheen (driven by CardTilt) */
+.card-dark,
+.card-paper {
+  --mx: 50%;
+  --my: 50%;
+  --sheen: 0;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+.card-paper {
+  position: relative;
+}
+.card-dark::after,
+.card-paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 200px at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.1),
+    transparent 60%
+  );
+  opacity: var(--sheen);
+  transition: opacity 0.3s ease;
 }
 
 /* ── Reveal (IntersectionObserver) ─────────────────────────── */

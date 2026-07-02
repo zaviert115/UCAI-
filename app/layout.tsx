@@ -6,6 +6,8 @@ import Footer from '@/components/layout/Footer'
 import NeuralBackground from '@/components/chrome/NeuralBackground'
 import ScrollProgress from '@/components/chrome/ScrollProgress'
 import CommandPalette from '@/components/chrome/CommandPalette'
+import CursorFX from '@/components/chrome/CursorFX'
+import CardTilt from '@/components/chrome/CardTilt'
 import { buildSearchIndex } from '@/lib/search'
 import './globals.css'
 
@@ -49,6 +51,8 @@ export default async function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${spaceMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <NeuralBackground />
+        <CursorFX />
+        <CardTilt />
         <ScrollProgress />
         <Header />
         <main className="flex-1" style={{ position: 'relative', zIndex: 1 }}>
