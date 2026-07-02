@@ -257,36 +257,48 @@ export default function NeuralBackground() {
       }
       c.globalCompositeOperation = 'source-over'
 
-      // desired morph shape from whichever [data-shape] section is centered
+      // scroll-linked morph: blend every in-view [data-shape] section weighted
+      // by how centered it is, so the field continuously interpolates
+      // brain → nz → koru → ai as you scroll rather than snapping per section.
       if (t - lastCapture > 500) {
         captureScenes()
         lastCapture = t
       }
-      let desired: string | null = null
-      if (scenes.length) {
-        const vhc = window.innerHeight * 0.5
-        let bd = 1e9
-        for (const s of scenes) {
-          const r = s.el.getBoundingClientRect()
-          if (r.bottom > 0 && r.top < window.innerHeight) {
-            const cen = (Math.max(r.top, 0) + Math.min(r.bottom, window.innerHeight)) / 2
-            const d = Math.abs(cen - vhc)
-            if (d < bd) {
-              bd = d
-              desired = s.shape
-            }
-          }
-        }
+      const vh = window.innerHeight
+      const vhc = vh * 0.5
+      const active: { shape: Pt[]; w: number }[] = []
+      let wsum = 0
+      for (const s of scenes) {
+        const sh = shapes[s.shape]
+        if (!sh) continue
+        const r = s.el.getBoundingClientRect()
+        if (r.bottom <= 0 || r.top >= vh) continue
+        const cen = (Math.max(r.top, 0) + Math.min(r.bottom, vh)) / 2
+        const w = Math.max(0, 1 - Math.abs(cen - vhc) / vh)
+        if (w <= 0) continue
+        active.push({ shape: sh, w })
+        wsum += w
       }
-      const tgt = desired ? shapes[desired] : null
-      lock += ((tgt ? 1 : 0) - lock) * 0.05
+      lock += (Math.min(1, wsum) - lock) * 0.06
       const ease = 0.06
       for (let i = 0; i < parts.length; i++) {
         const p = parts[i]
-        const T = tgt ? tgt[i] : null
-        const dx = T ? T.x : p.hx
-        const dy = T ? T.y : p.hy
-        const dz = T ? T.z : p.hz
+        let bx = 0
+        let by = 0
+        let bz = 0
+        if (wsum > 0) {
+          for (const a of active) {
+            const wn = a.w / wsum
+            const T = a.shape[i]
+            bx += T.x * wn
+            by += T.y * wn
+            bz += T.z * wn
+          }
+        }
+        // interpolate free-field home ↔ blended shape by lock strength
+        const dx = p.hx + (bx - p.hx) * lock
+        const dy = p.hy + (by - p.hy) * lock
+        const dz = p.hz + (bz - p.hz) * lock
         p.x += (dx - p.x) * ease
         p.y += (dy - p.y) * ease
         p.z += (dz - p.z) * ease

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import ScrambleText from '@/components/chrome/ScrambleText'
 
 interface SectionHeaderProps {
   index?: string // e.g. "01"
@@ -56,7 +57,7 @@ export default function SectionHeader({
           ...(align === 'center' ? { marginInline: 'auto' } : {}),
         }}
       >
-        {title}
+        {typeof title === 'string' ? <ScrambleText text={title} /> : title}
       </h2>
       {sub && (
         <p

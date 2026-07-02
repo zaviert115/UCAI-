@@ -1,5 +1,6 @@
 import PaperSection from '@/components/layout/PaperSection'
 import Reveal from '@/components/chrome/Reveal'
+import CountUp from '@/components/chrome/CountUp'
 
 const stats = [
   { num: '412', label: 'Members', sub: 'and growing' },
@@ -41,7 +42,7 @@ export default function StatsSection() {
                 color: 'transparent',
               }}
             >
-              {s.num}
+              <CountUp value={s.num} />
             </div>
             <div
               className="mono"
