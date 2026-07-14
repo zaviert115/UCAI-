@@ -20,30 +20,30 @@ const sponsors: {
   platinum: [
     {
       name: 'University of Canterbury',
-      logo: '/sponsors/uc.jpg',
+      logo: '/sponsors/uc.png',
       url: 'https://www.canterbury.ac.nz',
-      w: 944,
-      h: 629,
+      w: 778,
+      h: 605,
     },
     {
       name: 'UC Engineering Pūhanga',
       logo: '/sponsors/uc-engineering.png',
       url: 'https://www.canterbury.ac.nz/engineering',
-      w: 1890,
-      h: 591,
+      w: 1350,
+      h: 305,
     },
   ],
   gold: [],
   community: [],
   poweredBy: [
     { name: 'Claude', logo: '/sponsors/claude.png', url: 'https://claude.ai', w: 3840, h: 825 },
-    { name: 'OpenAI', logo: '/sponsors/openai.png', url: 'https://openai.com', w: 1280, h: 348 },
+    { name: 'OpenAI', logo: '/sponsors/openai.png', url: 'https://openai.com', w: 1276, h: 348 },
     {
       name: 'Gemini',
       logo: '/sponsors/gemini.png',
       url: 'https://gemini.google.com',
       w: 1080,
-      h: 1080,
+      h: 259,
     },
   ],
 }
@@ -55,14 +55,11 @@ function SponsorLogo({ sponsor, maxH }: { sponsor: Sponsor; maxH: number }) {
       alt={sponsor.name}
       width={sponsor.w}
       height={sponsor.h}
-      // multiply dissolves the white/opaque logo backgrounds into the cream
       style={{
         width: 'auto',
-        height: 'auto',
-        maxHeight: maxH,
+        height: maxH,
         maxWidth: '100%',
         objectFit: 'contain',
-        mixBlendMode: 'multiply',
       }}
     />
   ) : (
@@ -131,8 +128,8 @@ export default function SponsorsSection() {
   return (
     <PaperSection id="sponsors" dataShape="nz">
       <style>{`
-        .sponsor-logo img { opacity: .82; transition: opacity .2s ease, transform .2s ease; }
-        .sponsor-logo a:hover img { opacity: 1; transform: scale(1.03); }
+        .sponsor-logo img { filter: grayscale(1); opacity: .75; transition: filter .25s ease, opacity .25s ease, transform .25s ease; }
+        .sponsor-logo a:hover img { filter: grayscale(0); opacity: 1; transform: scale(1.03); }
       `}</style>
 
       <SectionHeader index="07" eyebrow="Backed by" title="Our supporters." tone="paper" />
