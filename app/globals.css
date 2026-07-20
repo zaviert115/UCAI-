@@ -691,33 +691,6 @@
     transform: none;
   }
 }
-@keyframes wipe {
-  0% {
-    transform: translateX(-130%) skewX(-8deg);
-  }
-  44%,
-  56% {
-    transform: translateX(0) skewX(-8deg);
-  }
-  100% {
-    transform: translateX(130%) skewX(-8deg);
-  }
-}
-@keyframes wipeMark {
-  0%,
-  26% {
-    opacity: 0;
-  }
-  44%,
-  56% {
-    opacity: 1;
-  }
-  74%,
-  100% {
-    opacity: 0;
-  }
-}
-
 /* ── Layout ────────────────────────────────────────────────── */
 .wrap {
   max-width: 1280px;
@@ -941,27 +914,6 @@
   font-family: var(--font-space-mono), monospace;
   background: rgba(11, 11, 15, 0.06);
   padding: 2px 6px;
-}
-
-/* ── Page-transition wipe (overlay fallback) ───────────────── */
-.pt-wipe {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(115deg, #00e0cc, #2b53ff 46%, #7a2bff);
-  animation: wipe 0.72s cubic-bezier(0.76, 0, 0.24, 1) both;
-}
-.pt-mark {
-  transform: skewX(8deg);
-  font-weight: 700;
-  font-size: clamp(44px, 9vw, 104px);
-  letter-spacing: -0.03em;
-  color: #06060e;
-  animation: wipeMark 0.72s ease both;
 }
 
 /* ── Reduced motion ────────────────────────────────────────── */
