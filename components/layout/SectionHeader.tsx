@@ -8,6 +8,8 @@ interface SectionHeaderProps {
   sub?: ReactNode
   tone?: 'paper' | 'dark'
   align?: 'left' | 'center'
+  /** Opt in to the decode-on-scroll flicker. Kept to the occasional bottom section. */
+  scramble?: boolean
 }
 
 /** Mono eyebrow (with optional [ NN ] index) + Space-Grotesk title. */
@@ -18,6 +20,7 @@ export default function SectionHeader({
   sub,
   tone = 'dark',
   align = 'left',
+  scramble = false,
 }: SectionHeaderProps) {
   const ink = tone === 'paper'
   const idxColor = ink ? '#2B53FF' : '#00E0CC'
@@ -57,7 +60,7 @@ export default function SectionHeader({
           ...(align === 'center' ? { marginInline: 'auto' } : {}),
         }}
       >
-        {typeof title === 'string' ? <ScrambleText text={title} /> : title}
+        {scramble && typeof title === 'string' ? <ScrambleText text={title} /> : title}
       </h2>
       {sub && (
         <p

@@ -132,7 +132,7 @@ export default function SponsorsSection() {
         .sponsor-logo a:hover img { filter: grayscale(0); opacity: 1; transform: scale(1.03); }
       `}</style>
 
-      <SectionHeader index="07" eyebrow="Backed by" title="Our supporters." tone="paper" />
+      <SectionHeader index="07" eyebrow="Backed by" title="Our supporters." tone="paper" scramble />
 
       <TierLabel>Principal partners</TierLabel>
       <LogoRow items={sponsors.platinum} maxH={64} />

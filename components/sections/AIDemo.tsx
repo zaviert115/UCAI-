@@ -39,6 +39,7 @@ export default function AIDemo() {
           sub="A real model, running live. Powered by the same APIs we teach with."
           tone="dark"
           align="center"
+          scramble
         />
 
         <div
