@@ -2,8 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
 // build.nvidia.com — free, OpenAI-compatible, rate-limited hosted open models.
+// 8B chosen for speed: it answers in <1s vs ~30-50s for the 70B on the free tier.
+// This demo only needs snappy, on-topic replies, not a large model.
 const NVIDIA_BASE_URL = 'https://integrate.api.nvidia.com/v1'
-const MODEL = process.env.NVIDIA_MODEL ?? 'meta/llama-3.3-70b-instruct'
+const MODEL = process.env.NVIDIA_MODEL ?? 'meta/llama-3.1-8b-instruct'
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.NVIDIA_API_KEY
@@ -34,7 +36,9 @@ export async function POST(req: NextRequest) {
         {
           role: 'system',
           content:
-            'You are a friendly UC AI Society assistant. Answer in 1-2 short sentences, max 50 words. Be helpful and enthusiastic.' +
+            'You are the assistant for the UC AI Society, a student-run artificial-intelligence and machine-learning club at the University of Canterbury in Christchurch, New Zealand. ' +
+            'Interpret technical acronyms and terms in their AI/ML sense (e.g. RAG = retrieval-augmented generation, a transformer is a neural-network architecture). ' +
+            'Answer in 1-2 short sentences, max 50 words. Be helpful and enthusiastic. If you are unsure, say so briefly rather than guessing.' +
             grounding,
         },
         { role: 'user', content: prompt },
