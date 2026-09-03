@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, CornerDownLeft } from 'lucide-react'
+import { Search } from 'lucide-react'
 import type { SearchIndex, SearchItem, SearchKind } from '@/lib/search'
 
 const TINT: Record<SearchKind, string> = {
@@ -11,6 +11,7 @@ const TINT: Record<SearchKind, string> = {
   project: '#7A2BFF',
   page: '#5BE0B0',
 }
+
 const BADGE: Record<SearchKind, string> = {
   event: 'EV',
   tutorial: 'TU',
@@ -23,25 +24,25 @@ const SUGGESTIONS = ['Upcoming events', 'How to join', 'Prompt engineering', 'Ha
 function rank(items: SearchItem[], q: string): SearchItem[] {
   const query = q.trim().toLowerCase()
   if (!query) return []
+
   const scored: { item: SearchItem; score: number }[] = []
   for (const item of items) {
-    const i = item.key.indexOf(query)
-    if (i === -1) continue
-    let score = i
+    const index = item.key.indexOf(query)
+    if (index === -1) continue
+
+    let score = index
     if (item.key.startsWith(query) || item.label.toLowerCase().startsWith(query)) score -= 6
     scored.push({ item, score })
   }
+
   scored.sort((a, b) => a.score - b.score)
-  return scored.slice(0, 8).map((s) => s.item)
+  return scored.slice(0, 8).map(({ item }) => item)
 }
 
 export default function CommandPalette({ index }: { index: SearchIndex }) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
-  const [aiActive, setAiActive] = useState(false)
-  const [aiLoading, setAiLoading] = useState(false)
-  const [aiAnswer, setAiAnswer] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   const results = useMemo(() => rank(index.items, query), [index.items, query])
@@ -50,70 +51,36 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
   const close = useCallback(() => {
     setOpen(false)
     setQuery('')
-    setAiActive(false)
-    setAiAnswer('')
-    setAiLoading(false)
   }, [])
 
-  // ⌘K / Ctrl+K toggle, Esc close, plus header "open-cmd" event
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault()
-        setOpen((v) => !v)
-      } else if (e.key === 'Escape') {
+    const onKey = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setOpen((value) => !value)
+      } else if (event.key === 'Escape') {
         setOpen(false)
       }
     }
     const onOpen = () => setOpen(true)
+
     window.addEventListener('keydown', onKey)
-    window.addEventListener('open-cmd', onOpen)
+    window.addEventListener('open-search', onOpen)
     return () => {
       window.removeEventListener('keydown', onKey)
-      window.removeEventListener('open-cmd', onOpen)
+      window.removeEventListener('open-search', onOpen)
     }
   }, [])
 
   useEffect(() => {
-    if (open) {
-      const t = setTimeout(() => inputRef.current?.focus(), 30)
-      return () => clearTimeout(t)
-    }
+    if (!open) return
+    const timer = setTimeout(() => inputRef.current?.focus(), 30)
+    return () => clearTimeout(timer)
   }, [open])
 
   const go = (href: string) => {
     close()
     router.push(href)
-  }
-
-  const runAI = async () => {
-    const q = query.trim()
-    if (!q) return
-    setAiActive(true)
-    setAiLoading(true)
-    setAiAnswer('')
-    try {
-      const res = await fetch('/api/ai-demo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: q.slice(0, 500) }),
-      })
-      const data = await res.json()
-      setAiAnswer(data.answer ?? data.error ?? 'Sorry, something went wrong.')
-    } catch {
-      setAiAnswer('// the model is napping. try again in a sec.')
-    } finally {
-      setAiLoading(false)
-    }
-  }
-
-  const onInputKey = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      if (results.length > 0 && !hasQuery) return
-      if (results.length > 0) go(results[0].href)
-      else runAI()
-    }
   }
 
   if (!open) return null
@@ -135,7 +102,7 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
       }}
     >
       <div
-        onClick={(e) => e.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-label="Search UC AI Society"
@@ -159,11 +126,16 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
           <Search size={18} color="#00E0CC" aria-hidden="true" />
           <input
             ref={inputRef}
-            aria-label="Search the site or ask UC AI Society"
+            aria-label="Search the UC AI Society website"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={onInputKey}
-            placeholder="Search events, tutorials, projects — or ask a question"
+            onChange={(event) => setQuery(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && results[0]) {
+                event.preventDefault()
+                go(results[0].href)
+              }
+            }}
+            placeholder="Search events, tutorials, projects, and pages"
             style={{
               flex: 1,
               background: 'transparent',
@@ -188,118 +160,11 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
         </div>
 
         <div style={{ maxHeight: '54vh', overflowY: 'auto' }}>
-          {hasQuery && (
-            <button
-              onClick={runAI}
-              style={{
-                display: 'flex',
-                width: '100%',
-                textAlign: 'left',
-                alignItems: 'center',
-                gap: 13,
-                padding: '15px 20px',
-                borderBottom: '1px solid rgba(255,255,255,0.07)',
-                cursor: 'pointer',
-              }}
-            >
-              <span
-                style={{
-                  display: 'grid',
-                  placeItems: 'center',
-                  width: 30,
-                  height: 30,
-                  background: 'linear-gradient(135deg,#00E0CC,#7A2BFF)',
-                  color: '#06060e',
-                  fontWeight: 700,
-                  flex: 'none',
-                }}
-              >
-                ✶
-              </span>
-              <span style={{ flex: 1, minWidth: 0 }}>
-                <span
-                  style={{
-                    display: 'block',
-                    fontSize: 15,
-                    color: '#F2EFE6',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  Ask UC·AI — “{query}”
-                </span>
-                <span
-                  className="mono"
-                  style={{
-                    display: 'block',
-                    fontSize: 11,
-                    color: 'rgba(242,239,230,0.5)',
-                    marginTop: 3,
-                  }}
-                >
-                  Generate an answer about the club
-                </span>
-              </span>
-              <CornerDownLeft size={16} color="#00E0CC" />
-            </button>
-          )}
-
-          {aiActive && (
-            <div
-              style={{
-                padding: '18px 20px',
-                borderBottom: '1px solid rgba(255,255,255,0.08)',
-                background: 'rgba(0,224,204,0.04)',
-              }}
-            >
-              <div
-                className="mono"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  fontSize: 10.5,
-                  letterSpacing: '0.14em',
-                  color: '#00E0CC',
-                  marginBottom: 10,
-                }}
-              >
-                <span
-                  style={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: '50%',
-                    background: '#00E0CC',
-                    animation: 'dotpulse 1s infinite',
-                  }}
-                />
-                UC·AI ASSISTANT
-              </div>
-              {aiLoading ? (
-                <div className="mono" style={{ fontSize: 13, color: 'rgba(242,239,230,0.6)' }}>
-                  Thinking…
-                </div>
-              ) : (
-                <div
-                  style={{
-                    fontSize: 15,
-                    lineHeight: 1.55,
-                    color: '#F2EFE6',
-                    whiteSpace: 'pre-wrap',
-                  }}
-                >
-                  {aiAnswer}
-                </div>
-              )}
-            </div>
-          )}
-
           {hasQuery &&
-            results.map((r) => (
+            results.map((result) => (
               <button
-                key={`${r.kind}-${r.href}-${r.label}`}
-                onClick={() => go(r.href)}
+                key={`${result.kind}-${result.href}-${result.label}`}
+                onClick={() => go(result.href)}
                 style={{
                   display: 'flex',
                   width: '100%',
@@ -322,10 +187,10 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
                     fontSize: 10,
                     fontWeight: 700,
                     color: '#06060e',
-                    background: TINT[r.kind],
+                    background: TINT[result.kind],
                   }}
                 >
-                  {BADGE[r.kind]}
+                  {BADGE[result.kind]}
                 </span>
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <span
@@ -338,7 +203,7 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
                       textOverflow: 'ellipsis',
                     }}
                   >
-                    {r.label}
+                    {result.label}
                   </span>
                   <span
                     className="mono"
@@ -349,18 +214,18 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
                       marginTop: 2,
                     }}
                   >
-                    {r.sub}
+                    {result.sub}
                   </span>
                 </span>
               </button>
             ))}
 
-          {hasQuery && results.length === 0 && !aiActive && (
+          {hasQuery && results.length === 0 && (
             <div
               className="mono"
               style={{ padding: '20px', fontSize: 13, color: 'rgba(242,239,230,0.5)' }}
             >
-              No matches — press ↵ to ask UC·AI instead.
+              No matching pages or content.
             </div>
           )}
 
@@ -378,11 +243,11 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
                 TRY
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {SUGGESTIONS.map((s) => (
+                {SUGGESTIONS.map((suggestion) => (
                   <button
-                    key={s}
+                    key={suggestion}
                     onClick={() => {
-                      setQuery(s)
+                      setQuery(suggestion)
                       setTimeout(() => inputRef.current?.focus(), 0)
                     }}
                     style={{
@@ -393,7 +258,7 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
                       cursor: 'pointer',
                     }}
                   >
-                    {s}
+                    {suggestion}
                   </button>
                 ))}
               </div>

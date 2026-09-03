@@ -11,16 +11,15 @@
 
 ## Stack
 
-| Concern    | Choice                                                      |
-| ---------- | ----------------------------------------------------------- |
-| Framework  | Next.js 16 App Router + TypeScript (strict)                 |
-| Styling    | Tailwind CSS v4 + shadcn/ui                                 |
-| Content    | MDX files via `next-mdx-remote` + `gray-matter`             |
-| Fonts      | Inter Tight + JetBrains Mono (`next/font/google`)           |
-| Email      | Resend SDK — `/api/contact` route handler                   |
-| AI demo    | NVIDIA NIM via the OpenAI-compatible SDK and `/api/ai-demo` |
-| Analytics  | Vercel Analytics                                            |
-| Deployment | Vercel                                                      |
+| Concern    | Choice                                            |
+| ---------- | ------------------------------------------------- |
+| Framework  | Next.js 16 App Router + TypeScript (strict)       |
+| Styling    | Tailwind CSS v4 + shadcn/ui                       |
+| Content    | MDX files via `next-mdx-remote` + `gray-matter`   |
+| Fonts      | Inter Tight + JetBrains Mono (`next/font/google`) |
+| Email      | Resend SDK — `/api/contact` route handler         |
+| Analytics  | Vercel Analytics                                  |
+| Deployment | Vercel                                            |
 
 > **CSS import note:** Tailwind v4's PostCSS plugin uses the `"style"` export condition for all `@import` statements, which Turbopack doesn't support for sub-path package exports. `tw-animate-css` and `shadcn/dist/tailwind.css` are inlined directly into `app/globals.css`. Don't switch them back to `@import` — the dev server will 500.
 
@@ -28,16 +27,16 @@
 
 ## Pages
 
-| Route               | Description                                                                                           |
-| ------------------- | ----------------------------------------------------------------------------------------------------- |
-| `/`                 | Hero, stats, pillars, events teaser, projects teaser, tutorials teaser, team, AI demo, sponsors, join |
-| `/events`           | Full event listing with filter chips                                                                  |
-| `/events/[slug]`    | Individual event with full MDX content                                                                |
-| `/tutorials`        | Tutorial index grouped by category                                                                    |
-| `/tutorials/[slug]` | Full tutorial content                                                                                 |
-| `/projects`         | Member project showcase                                                                               |
-| `/about`            | Mission, pillars, committee cards                                                                     |
-| `/contact`          | Contact form + club details                                                                           |
+| Route               | Description                                                                                  |
+| ------------------- | -------------------------------------------------------------------------------------------- |
+| `/`                 | Hero, stats, pillars, events teaser, projects teaser, tutorials teaser, team, sponsors, join |
+| `/events`           | Full event listing with filter chips                                                         |
+| `/events/[slug]`    | Individual event with full MDX content                                                       |
+| `/tutorials`        | Tutorial index grouped by category                                                           |
+| `/tutorials/[slug]` | Full tutorial content                                                                        |
+| `/projects`         | Member project showcase                                                                      |
+| `/about`            | Mission, pillars, committee cards                                                            |
+| `/contact`          | Contact form + club details                                                                  |
 
 ---
 
@@ -58,8 +57,6 @@ Open [http://localhost:3000](http://localhost:3000).
 | Variable               | Purpose                                                                    |
 | ---------------------- | -------------------------------------------------------------------------- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical public URL used in metadata, robots, and the sitemap             |
-| `NVIDIA_API_KEY`       | Powers the AI demo through NVIDIA NIM; optional in local development       |
-| `NVIDIA_MODEL`         | Optional NVIDIA model override; defaults to `meta/llama-3.1-8b-instruct`   |
 | `RESEND_API_KEY`       | Contact form email delivery — free key at [resend.com](https://resend.com) |
 | `CONTACT_TO_EMAIL`     | Where form submissions are sent — `ucaisoc@outlook.com`                    |
 | `CONTACT_FROM_EMAIL`   | Verified Resend sender — use `onboarding@resend.dev` for local testing     |
@@ -133,7 +130,6 @@ To add a sponsor: drop a logo in `public/sponsors/` and add an entry to the `spo
 ```
 app/
 ├── api/
-│   ├── ai-demo/       Anthropic proxy
 │   └── contact/       Resend email handler
 ├── events/            List + [slug] detail pages
 ├── tutorials/         List + [slug] detail pages
@@ -168,7 +164,7 @@ public/
 
 - [x] **Vercel deployment** — production site is live
 - [x] **Quality checks** — lint, typecheck, and production build run in GitHub Actions
-- [x] **Maintenance automation** — Dependabot monitors packages and GitHub Actions
+- [x] **Security foundations** — dependency audit, secret scanning, and protected `main`
 - [ ] **Custom domain** — point `ucaisoc.nz` at Vercel, then update `NEXT_PUBLIC_SITE_URL`
 - [ ] **Current club details** — confirm membership statistics and publish the complete committee
 - [ ] **Membership links** — add verified StudentLink, Discord, and LinkedIn URLs when available

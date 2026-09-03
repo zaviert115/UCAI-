@@ -15,8 +15,6 @@ export interface SearchItem {
 
 export interface SearchIndex {
   items: SearchItem[]
-  /** grounding context for the Ask UC·AI assistant */
-  aiContext: string
 }
 
 const PAGES: SearchItem[] = [
@@ -87,13 +85,5 @@ export async function buildSearchIndex(): Promise<SearchIndex> {
 
   const items = [...PAGES, ...eventItems, ...tutorialItems, ...projectItems]
 
-  const aiContext = [
-    'You are the assistant for UC AI Society, a student-led club at the University of Canterbury (Ōtautahi Christchurch, Aotearoa New Zealand). It runs workshops, panels, socials and tutorials, and the biggest student hackathon in the South Island. Membership is free and open to all UC students.',
-    `UPCOMING & RECENT EVENTS: ${events.map((e) => e.title).join('; ')}.`,
-    `TUTORIALS: ${tutorials.map((t) => t.title).join('; ')}.`,
-    `MEMBER PROJECTS: ${projects.map((p) => p.title).join('; ')}.`,
-    'Answer only about UC AI Society. If asked something unrelated, say you only cover UC AI Society.',
-  ].join('\n')
-
-  return { items, aiContext }
+  return { items }
 }

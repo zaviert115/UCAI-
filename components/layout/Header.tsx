@@ -23,8 +23,8 @@ const links = [
   { href: '/contact', label: 'Contact' },
 ]
 
-function openCmd() {
-  window.dispatchEvent(new Event('open-cmd'))
+function openSearch() {
+  window.dispatchEvent(new Event('open-search'))
 }
 
 export default function Header() {
@@ -125,8 +125,8 @@ export default function Header() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <button
-          onClick={openCmd}
-          aria-label="Ask UC·AI"
+          onClick={openSearch}
+          aria-label="Search the UC AI Society website"
           className="mono"
           style={{
             display: 'inline-flex',
@@ -143,7 +143,7 @@ export default function Header() {
           }}
         >
           <Search size={14} aria-hidden="true" />
-          <span className="hidden sm:inline">Ask UC·AI</span>
+          <span className="hidden sm:inline">Search</span>
           <span
             style={{
               padding: '2px 6px',

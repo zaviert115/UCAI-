@@ -6,7 +6,6 @@ import EventsSection from '@/components/sections/EventsSection'
 import ProjectsSection from '@/components/sections/ProjectsSection'
 import TutorialsSection from '@/components/sections/TutorialsSection'
 import TeamSection from '@/components/sections/TeamSection'
-import AIDemo from '@/components/sections/AIDemo'
 import SponsorsSection from '@/components/sections/SponsorsSection'
 import JoinSection from '@/components/sections/JoinSection'
 import { getAllEvents } from '@/lib/events'
@@ -29,7 +28,6 @@ export default async function HomePage() {
       <ProjectsSection />
       <TutorialsSection tutorials={allTutorials} teaser />
       <TeamSection />
-      <AIDemo />
       <StatsSection />
       <SponsorsSection />
       <JoinSection />
