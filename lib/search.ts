@@ -64,7 +64,7 @@ export async function buildSearchIndex(): Promise<SearchIndex> {
   const eventItems: SearchItem[] = events.map((e) => ({
     kind: 'event',
     label: e.title,
-    sub: `${e.location} · ${new Date(e.date).toLocaleDateString('en-NZ', { month: 'short', year: 'numeric' })}`,
+    sub: `${e.location} · ${new Date(e.date).toLocaleDateString('en-NZ', { month: 'short', year: 'numeric', timeZone: 'Pacific/Auckland' })}`,
     href: `/events/${e.slug}`,
     key: `${e.title} ${e.description} ${e.location}`.toLowerCase(),
   }))

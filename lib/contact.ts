@@ -12,14 +12,16 @@ export async function sendContactEmail(data: ContactPayload): Promise<void> {
   if (!apiKey) throw new Error('RESEND_API_KEY is not set')
 
   const resend = new Resend(apiKey)
-  const to = process.env.CONTACT_TO_EMAIL ?? 'committee@ucaisoc.nz'
+  const to = process.env.CONTACT_TO_EMAIL ?? 'ucaisoc@outlook.com'
   const from = process.env.CONTACT_FROM_EMAIL ?? 'noreply@ucaisoc.nz'
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from,
     to,
     replyTo: data.email,
     subject: `[UC AI SOC Contact] ${data.reason} — from ${data.name}`,
     text: `Name: ${data.name}\nEmail: ${data.email}\nReason: ${data.reason}\n\n${data.message}`,
   })
+
+  if (error) throw new Error(`Resend rejected the message: ${error.message}`)
 }

@@ -31,6 +31,7 @@ export default async function TutorialPage({ params }: Props) {
   if (!tutorial) notFound()
 
   const dateStr = new Date(tutorial.date).toLocaleDateString('en-NZ', {
+    timeZone: 'Pacific/Auckland',
     year: 'numeric',
     month: 'long',
     day: 'numeric',

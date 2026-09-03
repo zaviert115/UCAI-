@@ -9,6 +9,7 @@ import CommandPalette from '@/components/chrome/CommandPalette'
 import CursorFX from '@/components/chrome/CursorFX'
 import CardTilt from '@/components/chrome/CardTilt'
 import { buildSearchIndex } from '@/lib/search'
+import { siteConfig } from '@/lib/site'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -25,19 +26,23 @@ const spaceMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | UC AI Society',
-    default: 'UC AI Society',
+    template: `%s | ${siteConfig.name}`,
+    default: siteConfig.name,
   },
-  description:
-    'A student-led club at the University of Canterbury focused on helping students understand and use AI in practical, ethical, and real-world ways.',
-  metadataBase: new URL('https://ucaisoc.nz'),
+  description: siteConfig.description,
+  metadataBase: new URL(siteConfig.url),
   openGraph: {
     type: 'website',
-    siteName: 'UC AI Society',
+    siteName: siteConfig.name,
+    title: siteConfig.name,
+    description: siteConfig.description,
+    url: '/',
     locale: 'en_NZ',
   },
   twitter: {
     card: 'summary_large_image',
+    title: siteConfig.name,
+    description: siteConfig.description,
   },
 }
 

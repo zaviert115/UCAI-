@@ -74,4 +74,4 @@ The site will automatically show it as "upcoming" or "past" based on the `date` 
 
 ## Questions?
 
-Open a GitHub issue or email [committee@ucaisoc.nz](mailto:committee@ucaisoc.nz).
+Open a GitHub issue or email [ucaisoc@outlook.com](mailto:ucaisoc@outlook.com).

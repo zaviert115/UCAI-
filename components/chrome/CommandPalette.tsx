@@ -96,7 +96,7 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
       const res = await fetch('/api/ai-demo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: q.slice(0, 500), context: index.aiContext }),
+        body: JSON.stringify({ prompt: q.slice(0, 500) }),
       })
       const data = await res.json()
       setAiAnswer(data.answer ?? data.error ?? 'Sorry, something went wrong.')
@@ -136,6 +136,9 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Search UC AI Society"
         style={{
           width: 'min(680px,94vw)',
           background: 'rgba(12,12,22,0.97)',
@@ -156,6 +159,7 @@ export default function CommandPalette({ index }: { index: SearchIndex }) {
           <Search size={18} color="#00E0CC" aria-hidden="true" />
           <input
             ref={inputRef}
+            aria-label="Search the site or ask UC AI Society"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onInputKey}

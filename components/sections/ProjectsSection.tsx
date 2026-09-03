@@ -34,7 +34,7 @@ export default function ProjectsSection() {
           index="03"
           eyebrow="Member projects"
           title="Built by students at UC."
-          sub="A taste of what comes out of our workshops and hackathons. Want yours featured? Submit it on Discord."
+          sub="A taste of what comes out of our workshops and hackathons. Want yours featured? Send it to the committee."
           tone="dark"
         />
         <a href="/projects" className="btn btn--outline">

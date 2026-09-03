@@ -5,19 +5,30 @@ import type { Event } from '@/types/event'
 
 const EVENTS_DIR = path.join(process.cwd(), 'content', 'events')
 
+function todayInNewZealand(): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Pacific/Auckland',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date())
+}
+
 async function parseEventFile(filename: string): Promise<Event> {
   const slug = filename.replace(/\.mdx?$/, '')
   const raw = await fs.readFile(path.join(EVENTS_DIR, filename), 'utf-8')
   const { data, content } = matter(raw)
-  const isPast = new Date(data.date as string) < new Date()
+  const date = data.date as string
+  const isPast = date < todayInNewZealand()
   return {
     slug,
     title: data.title as string,
-    date: data.date as string,
+    date,
     time: data.time as string,
     location: data.location as string,
     description: data.description as string,
     content,
+    category: data.category as string | undefined,
     rsvpLink: data.rsvpLink as string | undefined,
     coverImage: data.coverImage as string | undefined,
     isPast,

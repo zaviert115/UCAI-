@@ -11,15 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-
-const REASONS = [
-  'General enquiry',
-  'Joining the club',
-  'Sponsorship / partnership',
-  'Committee interest',
-  'Event / tutorial idea',
-  'Other',
-]
+import { CONTACT_REASONS } from '@/lib/contact-fields'
 
 type Status = 'idle' | 'sending' | 'success' | 'error'
 
@@ -91,6 +83,7 @@ export default function ContactForm() {
             placeholder="Your name"
             required
             autoComplete="name"
+            maxLength={100}
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -105,6 +98,7 @@ export default function ContactForm() {
             placeholder="you@example.com"
             required
             autoComplete="email"
+            maxLength={254}
           />
         </div>
       </div>
@@ -118,7 +112,7 @@ export default function ContactForm() {
             <SelectValue placeholder="Select a reason" />
           </SelectTrigger>
           <SelectContent>
-            {REASONS.map((r) => (
+            {CONTACT_REASONS.map((r) => (
               <SelectItem key={r} value={r}>
                 {r}
               </SelectItem>
@@ -138,14 +132,17 @@ export default function ContactForm() {
           placeholder="Tell us what you'd like to know..."
           rows={5}
           required
+          maxLength={5000}
         />
       </div>
 
-      {status === 'error' && (
-        <p role="alert" className="text-sm text-destructive">
-          {errorMsg}
-        </p>
-      )}
+      <div aria-live="polite" aria-atomic="true">
+        {status === 'error' && (
+          <p role="alert" className="text-sm text-destructive">
+            {errorMsg}
+          </p>
+        )}
+      </div>
 
       <Button
         type="submit"

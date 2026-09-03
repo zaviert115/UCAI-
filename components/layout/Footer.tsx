@@ -1,6 +1,5 @@
 import Link from 'next/link'
-
-const GITHUB = 'https://github.com/zaviert115/UCAI-'
+import { siteConfig } from '@/lib/site'
 
 function GithubIcon({ size = 14 }: { size?: number }) {
   return (
@@ -10,13 +9,9 @@ function GithubIcon({ size = 14 }: { size?: number }) {
   )
 }
 
-const partners = [
-  'UC Computer Science',
-  'UC Engineering',
-  'UC AI Research',
-  'Student Volunteer Army',
-  'Christchurch Tech',
-  'UCSA',
+const universityLinks = [
+  { name: 'University of Canterbury', href: 'https://www.canterbury.ac.nz' },
+  { name: 'UC Engineering Pūhanga', href: 'https://www.canterbury.ac.nz/engineering' },
 ]
 
 export default function Footer() {
@@ -33,7 +28,7 @@ export default function Footer() {
       <div className="wrap">
         {/* partners */}
         <div className="eyebrow" style={{ color: 'rgba(242,239,230,0.4)', marginBottom: 20 }}>
-          Partners &amp; Community
+          University community
         </div>
         <div
           style={{
@@ -45,9 +40,12 @@ export default function Footer() {
             marginBottom: 56,
           }}
         >
-          {partners.map((p) => (
-            <div
-              key={p}
+          {universityLinks.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
                 background: '#06060e',
                 padding: '22px 18px',
@@ -55,8 +53,8 @@ export default function Footer() {
                 color: 'rgba(242,239,230,0.7)',
               }}
             >
-              {p}
-            </div>
+              {item.name}
+            </a>
           ))}
         </div>
 
@@ -100,7 +98,7 @@ export default function Footer() {
               useful for every student.
             </p>
             <a
-              href={GITHUB}
+              href={siteConfig.github}
               target="_blank"
               rel="noopener noreferrer"
               className="mono"
@@ -127,23 +125,16 @@ export default function Footer() {
           </FootCol>
 
           <FootCol title="Community">
-            <a
-              href="https://www.facebook.com/profile.php?id=61582126750231"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={siteConfig.facebook} target="_blank" rel="noopener noreferrer">
               Facebook
             </a>
-            <a href="https://instagram.com/ucai.soc" target="_blank" rel="noopener noreferrer">
+            <a href={siteConfig.instagram} target="_blank" rel="noopener noreferrer">
               Instagram
             </a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Discord</a>
           </FootCol>
 
           <FootCol title="Contact">
-            <a href="mailto:ucaisoc@outlook.com">ucaisoc@outlook.com</a>
-            <a href="#">StudentLink sign-up</a>
+            <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
             <Link href="/contact">Contact form</Link>
           </FootCol>
         </div>

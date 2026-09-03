@@ -44,8 +44,8 @@ export default function ProjectsPage() {
                 color: 'rgba(242,239,230,0.72)',
               }}
             >
-              Shipped at workshops, hackathons, and in spare time. Want yours featured? Submit it on
-              Discord.
+              Shipped at workshops, hackathons, and in spare time. Want yours featured? Send it to
+              the committee.
             </p>
           </Reveal>
         </div>

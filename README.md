@@ -2,7 +2,7 @@
 
 > The official website for the UC AI Society — a student-led club at the University of Canterbury, Christchurch, New Zealand.
 
-**Live site:** [ucaisoc.nz](https://ucaisoc.nz) _(Vercel deploy pending)_  
+**Live site:** [uc-ai-soc-website.vercel.app](https://uc-ai-soc-website.vercel.app)
 **Email:** ucaisoc@outlook.com  
 **Instagram:** [@ucai.soc](https://instagram.com/ucai.soc)  
 **Facebook:** [UC AI Society](https://www.facebook.com/profile.php?id=61582126750231)
@@ -11,16 +11,16 @@
 
 ## Stack
 
-| Concern    | Choice                                                |
-| ---------- | ----------------------------------------------------- |
-| Framework  | Next.js 16 App Router + TypeScript (strict)           |
-| Styling    | Tailwind CSS v4 + shadcn/ui                           |
-| Content    | MDX files via `next-mdx-remote` + `gray-matter`       |
-| Fonts      | Inter Tight + JetBrains Mono (`next/font/google`)     |
-| Email      | Resend SDK — `/api/contact` route handler             |
-| AI demo    | Anthropic SDK — `claude-haiku-4-5` via `/api/ai-demo` |
-| Analytics  | Vercel Analytics                                      |
-| Deployment | Vercel (pending)                                      |
+| Concern    | Choice                                                      |
+| ---------- | ----------------------------------------------------------- |
+| Framework  | Next.js 16 App Router + TypeScript (strict)                 |
+| Styling    | Tailwind CSS v4 + shadcn/ui                                 |
+| Content    | MDX files via `next-mdx-remote` + `gray-matter`             |
+| Fonts      | Inter Tight + JetBrains Mono (`next/font/google`)           |
+| Email      | Resend SDK — `/api/contact` route handler                   |
+| AI demo    | NVIDIA NIM via the OpenAI-compatible SDK and `/api/ai-demo` |
+| Analytics  | Vercel Analytics                                            |
+| Deployment | Vercel                                                      |
 
 > **CSS import note:** Tailwind v4's PostCSS plugin uses the `"style"` export condition for all `@import` statements, which Turbopack doesn't support for sub-path package exports. `tw-animate-css` and `shadcn/dist/tailwind.css` are inlined directly into `app/globals.css`. Don't switch them back to `@import` — the dev server will 500.
 
@@ -55,12 +55,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ### Environment variables
 
-| Variable             | Purpose                                                                                                                                       |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RESEND_API_KEY`     | Contact form email delivery — free key at [resend.com](https://resend.com)                                                                    |
-| `CONTACT_TO_EMAIL`   | Where form submissions are sent — `ucaisoc@outlook.com`                                                                                       |
-| `CONTACT_FROM_EMAIL` | Verified Resend sender — use `onboarding@resend.dev` for local testing                                                                        |
-| `ANTHROPIC_API_KEY`  | Powers the AI demo — free key at [console.anthropic.com](https://console.anthropic.com). Optional: demo renders a fallback message without it |
+| Variable               | Purpose                                                                    |
+| ---------------------- | -------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical public URL used in metadata, robots, and the sitemap             |
+| `NVIDIA_API_KEY`       | Powers the AI demo through NVIDIA NIM; optional in local development       |
+| `NVIDIA_MODEL`         | Optional NVIDIA model override; defaults to `meta/llama-3.1-8b-instruct`   |
+| `RESEND_API_KEY`       | Contact form email delivery — free key at [resend.com](https://resend.com) |
+| `CONTACT_TO_EMAIL`     | Where form submissions are sent — `ucaisoc@outlook.com`                    |
+| `CONTACT_FROM_EMAIL`   | Verified Resend sender — use `onboarding@resend.dev` for local testing     |
 
 ### Scripts
 
@@ -85,6 +87,7 @@ title: 'Intro to LLMs'
 date: '2026-07-10'
 time: '6:00 PM – 8:00 PM'
 location: 'Rehua 101, UC'
+category: 'workshop' # optional: workshop or panel
 description: 'Short teaser shown on the events list.'
 rsvpLink: 'https://...' # optional
 coverImage: '/events/img.jpg' # optional — file goes in /public/events/
@@ -163,12 +166,13 @@ public/
 
 ## Roadmap
 
-- [ ] **Vercel deployment** — connect repo, add env vars, enable branch protection on `main`
-- [ ] **Supabase** — Postgres backend for member sign-ups, RSVPs, and project submissions
-- [ ] **Home page middle section** — placeholder removed (terminal widget), replacement TBD
-- [ ] **Full committee** — 3 of 6 team cards filled; remaining slots pending committee list
-- [ ] **Discord server** — footer link is a placeholder until the server is live
-- [ ] **StudentLink** — registration link placeholder in footer
+- [x] **Vercel deployment** — production site is live
+- [x] **Quality checks** — lint, typecheck, and production build run in GitHub Actions
+- [x] **Maintenance automation** — Dependabot monitors packages and GitHub Actions
+- [ ] **Custom domain** — point `ucaisoc.nz` at Vercel, then update `NEXT_PUBLIC_SITE_URL`
+- [ ] **Current club details** — confirm membership statistics and publish the complete committee
+- [ ] **Membership links** — add verified StudentLink, Discord, and LinkedIn URLs when available
+- [ ] **Current programme** — publish the next events and tutorial schedule
 
 ---
 

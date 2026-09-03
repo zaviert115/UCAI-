@@ -11,6 +11,7 @@ const FILTERS = ['upcoming', 'workshop', 'panel', 'all'] as const
 
 function fmt(d: string) {
   return new Date(d).toLocaleDateString('en-NZ', {
+    timeZone: 'Pacific/Auckland',
     weekday: 'short',
     day: 'numeric',
     month: 'short',
@@ -38,7 +39,9 @@ export default function EventsSection({
   events: Event[]
   teaser?: boolean
 }) {
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]>('upcoming')
+  const [filter, setFilter] = useState<(typeof FILTERS)[number]>(() =>
+    events.some((event) => !event.isPast) ? 'upcoming' : 'all'
+  )
 
   const filtered = useMemo(() => {
     const base = (() => {
@@ -62,7 +65,12 @@ export default function EventsSection({
           marginBottom: 48,
         }}
       >
-        <SectionHeader index="02" eyebrow="Upcoming" title="What's on." tone="paper" />
+        <SectionHeader
+          index="02"
+          eyebrow={teaser ? 'Upcoming' : 'Events'}
+          title="What's on."
+          tone="paper"
+        />
         {!teaser && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }} className="mono">
             {FILTERS.map((f) => (
@@ -158,11 +166,13 @@ export default function EventsSection({
         )}
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: 48 }}>
-        <Link href="/events" className="btn btn--outline-ink">
-          {teaser ? 'View all events →' : 'View full calendar →'}
-        </Link>
-      </div>
+      {teaser && (
+        <div style={{ textAlign: 'center', marginTop: 48 }}>
+          <Link href="/events" className="btn btn--outline-ink">
+            View all events →
+          </Link>
+        </div>
+      )}
     </PaperSection>
   )
 }
