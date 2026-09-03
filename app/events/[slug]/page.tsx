@@ -32,6 +32,7 @@ export default async function EventPage({ params }: Props) {
   if (!event) notFound()
 
   const dateStr = new Date(event.date).toLocaleDateString('en-NZ', {
+    timeZone: 'Pacific/Auckland',
     weekday: 'long',
     year: 'numeric',
     month: 'long',

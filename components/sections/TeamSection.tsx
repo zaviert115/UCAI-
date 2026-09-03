@@ -23,8 +23,6 @@ const team = [
   },
 ]
 
-const placeholders = 3
-
 function initials(name: string) {
   return name
     .split(' ')
@@ -40,7 +38,7 @@ export default function TeamSection() {
         index="06"
         eyebrow="The committee"
         title="Run by students."
-        sub="Volunteer-run by UC students who care. Email anyone directly — we read everything."
+        sub="Volunteer-run by UC students who care about making AI useful, accessible, and responsible."
         tone="paper"
       />
 
@@ -119,75 +117,6 @@ export default function TeamSection() {
                   Working on:
                 </span>{' '}
                 {p.working}
-              </p>
-            </div>
-          </Reveal>
-        ))}
-
-        {Array.from({ length: placeholders }).map((_, i) => (
-          <Reveal key={`placeholder-${i}`} delay={(team.length + i) * 0.08}>
-            <div
-              style={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 18,
-                padding: 28,
-                border: '1px dashed rgba(11,11,15,0.16)',
-                background: 'transparent',
-              }}
-            >
-              <div
-                className="mono"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 56,
-                  height: 56,
-                  fontSize: 22,
-                  fontWeight: 700,
-                  color: 'rgba(11,11,15,0.32)',
-                  background: 'rgba(11,11,15,0.05)',
-                }}
-              >
-                ?
-              </div>
-              <div>
-                <span
-                  className="eyebrow"
-                  style={{
-                    fontSize: 10,
-                    color: 'rgba(11,11,15,0.4)',
-                    display: 'block',
-                    marginBottom: 12,
-                  }}
-                >
-                  Role TBD
-                </span>
-                <h3
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 22,
-                    letterSpacing: '-0.02em',
-                    color: 'rgba(11,11,15,0.4)',
-                    margin: 0,
-                  }}
-                >
-                  Your name here
-                </h3>
-              </div>
-              <p
-                style={{
-                  marginTop: 'auto',
-                  paddingTop: 16,
-                  borderTop: '1px dashed rgba(11,11,15,0.16)',
-                  fontSize: 14.5,
-                  lineHeight: 1.55,
-                  color: 'rgba(11,11,15,0.45)',
-                }}
-              >
-                Interested in joining the committee? Get in touch.
               </p>
             </div>
           </Reveal>

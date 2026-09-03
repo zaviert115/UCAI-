@@ -11,11 +11,11 @@ import SponsorsSection from '@/components/sections/SponsorsSection'
 import JoinSection from '@/components/sections/JoinSection'
 import { getAllEvents } from '@/lib/events'
 import { getAllTutorials } from '@/lib/tutorials'
+import { siteConfig } from '@/lib/site'
 
 export const metadata: Metadata = {
-  title: 'UC AI Society',
-  description:
-    'A student-led club at the University of Canterbury focused on helping students understand and use AI in practical, ethical, and real-world ways.',
+  title: { absolute: siteConfig.name },
+  description: siteConfig.description,
 }
 
 export default async function HomePage() {

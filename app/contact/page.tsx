@@ -3,6 +3,7 @@ import PageContainer from '@/components/layout/PageContainer'
 import ContactForm from '@/components/sections/ContactForm'
 import Reveal from '@/components/chrome/Reveal'
 import GradientText from '@/components/ui/GradientText'
+import { siteConfig } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -10,12 +11,13 @@ export const metadata: Metadata = {
 }
 
 const socials = [
-  { label: 'Instagram', href: '#', handle: '@ucaisoc' },
-  { label: 'LinkedIn', href: '#', handle: 'UC AI Society' },
-  { label: 'Discord', href: '#', handle: 'Join our server' },
+  { label: 'Instagram', href: siteConfig.instagram, handle: '@ucai.soc' },
+  { label: 'Facebook', href: siteConfig.facebook, handle: 'UC AI Society' },
 ]
 
 export default function ContactPage() {
+  const contactFormEnabled = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL)
+
   return (
     <>
       <section className="dark-sec" style={{ paddingBlock: 'clamp(110px,16vh,190px)' }}>
@@ -59,9 +61,23 @@ export default function ContactPage() {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
           {/* Form */}
           <div className="flex-1 min-w-0">
-            <h2 className="text-2xl font-bold text-navy-800 mb-6">Send us a message</h2>
+            <h2 className="text-2xl font-bold text-navy-800 mb-6">
+              {contactFormEnabled ? 'Send us a message' : 'Email the committee'}
+            </h2>
             <div className="card-paper" style={{ padding: 'clamp(20px,4vw,40px)' }}>
-              <ContactForm />
+              {contactFormEnabled ? (
+                <ContactForm />
+              ) : (
+                <div className="space-y-5">
+                  <p className="text-muted-foreground leading-relaxed">
+                    Our web form is temporarily unavailable. Email us directly and the volunteer
+                    committee will get back to you as soon as it can.
+                  </p>
+                  <a href={`mailto:${siteConfig.email}`} className="btn btn--grad">
+                    Email {siteConfig.email} →
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 
@@ -70,10 +86,10 @@ export default function ContactPage() {
             <div>
               <h2 className="font-semibold text-navy-800 mb-3">Email</h2>
               <a
-                href="mailto:ucaisoc@outlook.com"
+                href={`mailto:${siteConfig.email}`}
                 className="text-muted-foreground hover:text-navy-800 transition-colors text-sm"
               >
-                ucaisoc@outlook.com
+                {siteConfig.email}
               </a>
             </div>
 

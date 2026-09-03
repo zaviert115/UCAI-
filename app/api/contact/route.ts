@@ -1,56 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendContactEmail } from '@/lib/contact'
-
-interface RateEntry {
-  count: number
-  resetAt: number
-}
-
-const rateMap = new Map<string, RateEntry>()
-const WINDOW_MS = 10 * 60 * 1000 // 10 minutes
-const MAX_REQUESTS = 3
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  const entry = rateMap.get(ip)
-  if (!entry || now > entry.resetAt) {
-    rateMap.set(ip, { count: 1, resetAt: now + WINDOW_MS })
-    return false
-  }
-  if (entry.count >= MAX_REQUESTS) return true
-  entry.count++
-  return false
-}
+import { CONTACT_REASONS, type ContactReason } from '@/lib/contact-fields'
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
-  const ip =
-    request.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
-    request.headers.get('x-real-ip') ??
-    'unknown'
-
-  if (isRateLimited(ip)) {
+  const rateLimit = checkRateLimit({
+    key: `contact:${getClientIp(request.headers)}`,
+    limit: 3,
+    windowMs: 10 * 60 * 1000,
+  })
+  if (!rateLimit.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please wait a few minutes and try again.' },
-      { status: 429 }
+      {
+        status: 429,
+        headers: { 'Retry-After': String(rateLimit.retryAfterSeconds) },
+      }
     )
   }
 
-  let body: Record<string, string>
+  let body: unknown
   try {
     body = await request.json()
   } catch {
     return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 })
   }
 
+  if (typeof body !== 'object' || body === null) {
+    return NextResponse.json({ error: 'Invalid request body.' }, { status: 400 })
+  }
+
+  const values = body as Record<string, unknown>
+
   // Honeypot — bots fill this, humans don't
-  if (body.website) {
+  if (values.website) {
     return NextResponse.json({ ok: true })
   }
 
-  const { name, email, reason, message } = body
+  const name = typeof values.name === 'string' ? values.name.trim() : ''
+  const email = typeof values.email === 'string' ? values.email.trim() : ''
+  const reason = typeof values.reason === 'string' ? values.reason.trim() : ''
+  const message = typeof values.message === 'string' ? values.message.trim() : ''
 
-  if (!name?.trim() || !email?.trim() || !reason?.trim() || !message?.trim()) {
+  if (!name || !email || !reason || !message) {
     return NextResponse.json({ error: 'All fields are required.' }, { status: 400 })
+  }
+
+  if (name.length > 100 || email.length > 254 || message.length > 5000) {
+    return NextResponse.json({ error: 'One or more fields are too long.' }, { status: 400 })
+  }
+
+  if (!CONTACT_REASONS.includes(reason as ContactReason)) {
+    return NextResponse.json({ error: 'Please select a valid reason.' }, { status: 400 })
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
